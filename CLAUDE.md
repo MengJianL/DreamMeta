@@ -11,7 +11,7 @@ This is not a traditional software project with build/test commands. It is a **c
 ## Architecture: Three-Layer Gravity Structure
 
 ```
-Layer 3 (Execution)  : M09-generate  M10-retrieve  M11-invoke  M12-verify  M13-create
+Layer 3 (Execution)  : M09-compose  M10-retrieve  M11-invoke  M12-verify  M13-create
 Layer 2 (Orchestration): M04-decompose  M05-route  M06-evaluate  M07-synthesize  M08-sequence
 Layer 1 (Foundation) : M01-memory  M02-identity  M03-channel
 ```
@@ -25,8 +25,7 @@ Detailed architecture index: `.claude/agents/CLAUDE.md`
 ## Key Conventions
 
 - **Agent file naming**: `M##-[name].md` (e.g., `M04-decompose.md`)
-- **Agent file structure**: each file follows a standard template — Layer → Identity → Core Functions → Behavior Constraints → Output Spec → Self-Evolution Mechanism. Subsections (`###`) within these sections hold operational protocols (e.g., Escalation Ladder in M08, Human Channel Protocol in M03, Capability Fallback Chain in M05).
-- **Orchestration layer agents** include a `思维模式` (Thinking Mode) section with Critical & Deep Thinking requirements
+- **Agent file structure**: each file follows a 16-section template — Layer → Identity → Existential Role → Core Function → Operational Boundary → Trigger Conditions → Working Modes → Input Contract → Output Contract → Decision Principles → Failure Modes → Quality Criteria → Neighbor Interaction → Runtime Binding → Self-Evolution → Minimal Governance Statement. Some atoms include optional Special Protocols (e.g., Escalation Ladder in M08, Human Channel Protocol in M03, Capability Gap Protocol in M05).
 - **Quality scale**: 0–5 per dimension (Accuracy, Completeness, Actionability, Format), 16/20 passing threshold
 - **Language**: bilingual Chinese/English documentation
 - **All descriptions are pure-abstract** — no domain-specific vocabulary, to ensure cross-domain reusability
@@ -70,3 +69,4 @@ When starting a new project, copy `.claude/agents/` (the 13 atoms + index). Do *
 - `Knowledge/LaoJin_paper.pdf` — source paper defining 8 architectural principles and 10-phase workflow
 - `Knowledge/2.png` — three-layer gravity structure visual
 - `Knowledge/1.png` — agent file structure reference
+- `Renovation/` — design source documents for the 16-section template rewrite (术语表, 总览图表, 模板, M01-M13 specifications)
