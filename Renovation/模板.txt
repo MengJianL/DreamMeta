@@ -1,0 +1,541 @@
+下面是我建议你后续用于 13 个文件的正式骨架。
+
+  ---
+  1. Layer
+
+  用途
+
+  标明原子属于：
+  - Foundation
+  - Orchestration
+  - Execution
+
+  建议写法
+
+  - Layer 名称
+  - 该层在整体系统中的职责位置一句话说明
+
+  ---
+  2. Identity / 身份定位
+
+  要回答的问题
+
+  - 这个原子是什么
+  - 它在系统中的核心定位是什么
+  - 它不应被误解成什么
+
+  推荐子段
+
+  - 核心定义
+  - 本质说明
+  - 关键非误解声明
+
+  写作要求
+
+  这一段不能只是“负责做 X”，
+  而要写出：
+  ▎ 为什么系统必须有这个原子，而不能由相邻原子顺手代替。
+
+  ---
+  3. Existential Role / 存在意义
+
+  要回答的问题
+
+  - 这个原子解决哪类根本问题
+  - 没有它，系统会失去什么
+  - 它在三层引力结构中的存在理由是什么
+
+  作用
+
+  这是“元性提升器”。
+  很多文件一旦加上这一节，就不会只停留在功能说明。
+
+  ---
+  4. Core Function / 核心功能
+
+  要回答的问题
+
+  - 它稳定、重复出现的核心动作有哪些
+
+  推荐子段
+
+  建议 4–6 个核心功能项，每项都写：
+  - 功能名
+  - 功能说明
+  - 与其他功能的关系
+
+  注意
+
+  这里写的是稳定能力簇，不是一次性步骤清单。
+
+  ---
+  5. Operational Boundary / 操作边界
+
+  这是必须保留的硬段。
+
+  推荐固定子段
+
+  5.1 This Atom Is Responsible For
+
+  - 负责什么
+
+  5.2 This Atom Is Not Responsible For
+
+  - 不负责什么
+
+  5.3 Boundary Violation Signals
+
+  - 哪些现象说明它开始越界
+
+  作用
+
+  这一节是“最小可治理化单元”的核心之一。
+
+  ---
+  6. Trigger Conditions / 触发条件
+
+  要回答的问题
+
+  - 什么情况下应由这个原子介入
+  - 什么情况下不应介入
+  - 哪些情境是典型入口
+
+  推荐子段
+
+  - 正向触发
+  - 反向排除
+  - 特殊触发场景
+
+  ---
+  7. Working Modes / 工作模式
+
+  要回答的问题
+
+  - 该原子是否有不同强度/不同复杂度模式
+  - 不同模式下行为有何差异
+
+  建议模式写法
+
+  可以根据原子特点选择：
+  - lightweight / standard / heavyweight
+  - direct / comparative / exploratory
+  - threshold / diagnostic / audit
+  等
+
+  作用
+
+  这是将“抽象原子”转成“复杂度可控原子”的关键。
+
+  ---
+  8. Input Contract / 输入契约
+
+  要回答的问题
+
+  - 这个原子接收什么对象
+  - 输入最少需要具备哪些条件
+  - 输入不足时应如何响应
+
+  推荐固定子段
+
+  - expected input
+  - minimum sufficiency
+  - when to reject / defer / escalate
+
+  ---
+  9. Output Contract / 输出契约
+
+  要回答的问题
+
+  - 这个原子的产物长什么样
+  - 输出必须带哪些元信息
+  - 输出如何支持后续原子接手
+
+  推荐固定子段
+
+  - output object
+  - status / scope / provenance
+  - handover readiness
+
+  关键要求
+
+  每个原子的输出都应该具备交接性。
+
+  ---
+  10. Decision Principles / 决策原则
+
+  要回答的问题
+
+  - 该原子在模糊情境下遵循什么判断哲学
+  - 它优先保护什么
+  - 它绝不牺牲什么
+
+  建议数量
+
+  5–7 条最佳。
+
+  作用
+
+  这是让原子在复杂任务中不塌缩成“普通助手”的关键段。
+
+  ---
+  11. Failure Modes / 失效模式
+
+  要回答的问题
+
+  - 这个原子最常如何失败
+  - 什么叫做“假成功”
+  - 什么征象说明它正在劣化
+
+  推荐写法
+
+  每个 failure mode 尽量写：
+  - 名称
+  - 失效机制
+  - 后果
+
+  作用
+
+  如果没有这一段，原子就难以被真正治理。
+
+  ---
+  12. Quality Criteria / 质量标准
+
+  要回答的问题
+
+  - 如何判断这个原子的输出好不好
+  - 哪些维度可用于审查它
+
+  推荐结构
+
+  为该原子定义 5–6 个最相关维度。
+  如：
+  - boundary clarity
+  - handover utility
+  - reliability marking
+  - minimal overreach
+  等
+
+  注意
+
+  这里不是全系统共用一套，而是“原子特化指标”。
+
+  ---
+  13. Interaction with Neighbor Atoms / 与邻接原子的交互
+
+  要回答的问题
+
+  - 与相邻原子如何分工
+  - 交接顺序如何
+  - 谁先谁后
+  - 谁不能替代谁
+
+  推荐写法
+
+  至少写与 4–6 个最相关原子的交互。
+  不要平均写 12 个，否则会失焦。
+
+  作用
+
+  这一节确保“原子不是孤岛”。
+
+  ---
+  14. Runtime Binding / 运行时绑定
+
+  要回答的问题
+
+  - 在 Claude Code / 实际运行环境中，这个抽象原子怎么落地
+  - 哪些行为必须绑定到具体工具、委派或执行方式
+
+  特别重要
+
+  这个仓库里，这是必须项，不是附录。
+  因为你的架构明确是要和 Claude Code 环境绑定的。
+
+  ---
+  15. Self-Evolution Mechanism / 自演化机制
+
+  要回答的问题
+
+  - 这个原子如何从历史表现中优化自己
+  - 应记录哪些 recurring pattern
+  - 它的增强方向是什么
+  - 不应如何“错误增强”
+
+  推荐固定子段
+
+  - recurring observations
+  - evolution focus
+  - prohibited evolution path
+
+  作用
+
+  这是“元部门可演化”的关键接口。
+
+  ---
+  16. Minimal Governance Statement / 最小治理声明
+
+  要回答的问题
+
+  - 它为什么是最小可治理化单元
+  - 它的最小性在哪里
+  - 它的治理性在哪里
+  - 缺少它会怎样
+  - 过宽会怎样
+
+  作用
+
+  这是每个原子最后的“宪章压缩总结”。
+
+  ---
+  四、可选增强段
+
+  有些元适合增加专项协议，不必所有元都加。
+
+  ---
+  A. Escalation / Reflow Protocol
+
+  适合：
+  - M05
+  - M06
+  - M08
+  - M12
+  - M13
+  - M03
+
+  用途
+
+  明确：
+  - 失败怎么升级
+  - 问题怎么回流
+  - 回流到谁
+  - 什么时候不能继续硬撑
+
+  ---
+  B. Specialized Protocols / 专项协议
+
+  适合不同元加入特有协议，例如：
+
+  - M03：Human Channel Protocol
+  - M05：Capability Gap Protocol
+  - M08：Escalation Ladder
+  - M12：Verification Basis Protocol
+  - M13：Replication and Specialization Protocol
+  - M01：Memory Lifecycle Protocol
+  - M02：Identity Components / Drift-Correction Protocol
+
+  ---
+  五、三层模板微调建议
+
+  虽然主模板统一，但三层可以稍作偏置。
+
+  ---
+  Layer 1 基础层偏置
+
+  更强调
+
+  - continuity
+  - stability
+  - infrastructure
+  - persistence
+  - identity anchoring
+  - channel order
+
+  建议更重视的段
+
+  - Existential Role
+  - Operational Boundary
+  - Lifecycle / continuity logic
+  - Self-Evolution
+
+  ---
+  Layer 2 编排层偏置
+
+  更强调
+
+  - structure
+  - handover
+  - sequencing
+  - governance decision
+  - flow control
+  - orchestration logic
+
+  建议更重视的段
+
+  - Trigger Conditions
+  - Working Modes
+  - Decision Principles
+  - Neighbor Interaction
+  - Reflow / escalation
+
+  ---
+  Layer 3 执行层偏置
+
+  更强调
+
+  - object type
+  - capability type
+  - result packaging
+  - post-execution governance entry
+
+  建议更重视的段
+
+  - Input Contract
+  - Output Contract
+  - Runtime Binding
+  - Verification / evaluation handover
+
+  ---
+  六、长度建议
+
+  你一开始说得很对：
+  真正的元描述不该只是几十行。
+
+  我建议未来正式写时，每个原子的篇幅大致控制在：
+
+  基础版成熟目标
+
+  120–180 行
+
+  高复杂原子
+
+  像：
+  - M05
+  - M06
+  - M08
+  - M12
+  - M13
+
+  可以到：
+  160–220 行
+
+  不建议
+
+  - 少于 80 行：通常太薄
+  - 超过 300 行：通常开始失去原子性，除非拆成协议附件
+
+  ---
+  七、推荐固定写作风格
+
+  为了让 13 个文件整体质感一致，我建议统一以下风格。
+
+  ---
+  1. 先定义本质，再定义功能
+
+  不要一上来就是 bullet list 功能。
+  先写：
+  - 它是什么
+  - 它不是什么
+  - 为什么必须存在
+
+  ---
+  2. 功能后必须跟边界
+
+  每写完核心功能，一定要跟：
+  - not responsible for
+  - boundary violation signals
+
+  ---
+  3. 每个原子都必须有“失败方式”
+
+  没有 failure mode 的原子，不像治理原子。
+
+  ---
+  4. 每个原子都必须说明“如何交给下一个原子”
+
+  否则只是自我描述，不是系统原子。
+
+  ---
+  5. 每个原子都必须说明“如何错误增强”
+
+  这是你体系非常高级的一点。
+  例如：
+  - M01 不能靠囤积变强
+  - M05 不能靠吞并调度变强
+  - M13 不能靠无边界繁殖变强
+
+  这会让“元性”非常强。
+
+  ---
+  八、我建议你后续实际落盘时的文件骨架
+
+  你可以考虑让每个 M##-[name].md 统一长成下面这样：
+
+  # M##-[name]
+
+  ## Layer
+  ...
+
+  ## Identity / 身份定位
+  ...
+
+  ## Existential Role / 存在意义
+  ...
+
+  ## Core Function / 核心功能
+  ### 1. ...
+  ### 2. ...
+  ### 3. ...
+
+  ## Operational Boundary / 操作边界
+  ### Responsible For
+  ### Not Responsible For
+  ### Boundary Violation Signals
+
+  ## Trigger Conditions / 触发条件
+  ...
+
+  ## Working Modes / 工作模式
+  ### Mode 1
+  ### Mode 2
+  ### Mode 3
+
+  ## Input Contract / 输入契约
+  ...
+
+  ## Output Contract / 输出契约
+  ...
+
+  ## Decision Principles / 决策原则
+  ### Principle 1
+  ### Principle 2
+  ### Principle 3
+  ...
+
+  ## Failure Modes / 失效模式
+  ### 1. ...
+  ### 2. ...
+  ### 3. ...
+
+  ## Quality Criteria / 质量标准
+  ...
+
+  ## Interaction with Neighbor Atoms / 邻接交互
+  ### With M##
+  ### With M##
+  ...
+
+  ## Runtime Binding / 运行时绑定
+  ...
+
+  ## [Optional Special Protocol] / [可选专项协议]
+  ...
+
+  ## Self-Evolution Mechanism / 自演化机制
+  ...
+
+  ## Minimal Governance Statement / 最小治理声明
+  ...
+
+  ---
+  九、我对这个模板的评价
+
+  这个模板相比普通 agent 文件模板，最大的不同是：
+
+  它强制每个原子同时回答 4 件事
+
+  1. 我是什么
+  2. 我不是什么
+  3. 我如何被治理
+  4. 我如何持续存在并演化
+
+  也就是说，这个模板天然会把“几十行功能说明”拉升成“上百行组织宪章”。

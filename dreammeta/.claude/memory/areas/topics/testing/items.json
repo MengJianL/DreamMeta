@@ -1,0 +1,26 @@
+[
+  {
+    "id": "fact-20260316153753",
+    "fact": "5ae89653-5c7b-4fe5-8d32-a3cd7e6f9444",
+    "timestamp": "2026-03-16",
+    "status": "active"
+  },
+  {
+    "id": "fact-20260316164337",
+    "fact": "0ea7507d-e96a-40b5-a292-4877a8711c27",
+    "timestamp": "2026-03-16",
+    "status": "active"
+  },
+  {
+    "id": "fact-20260317141203",
+    "fact": "53d951d6-b707-4ec6-ad3c-fcf4f17c951a",
+    "timestamp": "2026-03-17",
+    "status": "active"
+  },
+  {
+    "id": "fact-20260317204426",
+    "fact": "f11d867e-8c5e-4a46-b7c5-b9c6aa922225",
+    "timestamp": "2026-03-17",
+    "status": "active"
+  }
+]

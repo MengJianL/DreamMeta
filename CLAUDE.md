@@ -17,8 +17,8 @@ Layer 1 (Foundation) : M01-memory  M02-identity  M03-channel
 ```
 
 - **Foundation** provides storage, identity, and communication infrastructure
-- **Orchestration** coordinates, routes, evaluates, and sequences (all use Critical & Deep Thinking mode)
-- **Execution** performs atomic operations: write, query, use, check, create
+- **Orchestration** coordinates, routes, evaluates, and sequences
+- **Execution** performs atomic operations: compose, retrieve, invoke, verify, create
 
 Detailed architecture index: `.claude/agents/CLAUDE.md`
 
@@ -29,6 +29,14 @@ Detailed architecture index: `.claude/agents/CLAUDE.md`
 - **Quality scale**: 0–5 per dimension (Accuracy, Completeness, Actionability, Format), 16/20 passing threshold
 - **Language**: bilingual Chinese/English documentation
 - **All descriptions are pure-abstract** — no domain-specific vocabulary, to ensure cross-domain reusability
+
+## Commands
+
+| Command | Purpose |
+|---|---|
+| `/meta <task>` | 元部门构建 Agent 团队执行任务：分析→设计团队→派遣执行→独立核验→独立评估→综合交付 |
+
+Defined in `.claude/commands/meta.md`.
 
 ## DreamMeta (梦元) Desktop App
 
@@ -49,16 +57,26 @@ pytest tests/            # run tests
 
 ## Runtime Binding: Claude Code Environment
 
+**Core principle: the Meta-Department is an orchestrator, not an executor. It builds Agent teams to do work.**
+
 When operating within Claude Code CLI, abstract atom operations bind to concrete tools:
 
 | Atom Concept | Claude Code Implementation |
 |---|---|
 | M04 标准/重量模式执行 | **Must** use `Agent` tool to create independent sub-task executors |
-| M05 路由至执行实体 | Invoke `Agent` tool with role prompt derived from target M## identity |
-| M08 并行执行 | Spawn multiple `Agent` tool calls in a single message (parallel) |
-| M06 独立评估 | A separate `Agent` instance that does NOT share execution context |
+| M05 路由至执行实体 | **Must** form real execution ownership via `Agent` instances |
+| M06 独立评估 | **Must** use a separate `Agent` instance, NO shared context with executor. No exceptions. |
+| M07 综合 (>3 sources) | **Must** delegate to independent `Agent` for context isolation |
+| M08 并行执行 | Spawn multiple `Agent` tool calls in a single message (max 5 per batch) |
+| M09 非微型生成 | **Must** use independent `Agent` for all non-trivial composition tasks |
+| M10 跨源检索 (≥2 sources) | **Must** delegate to independent `Agent` for cross-source retrieval |
+| M11 非微型调用 | **Must** use independent `Agent` for external system/API invocations |
+| M12 独立核验 | Verifier **must never** share execution context with producer (regardless of how production happened) |
+| M13 所有级别创造 | Skill-level **must** use independent `Agent`; Agent/Meta-Dept level **must** use multi-Agent collaboration |
 
-**Single-entity execution is only permitted for M04's "轻量模式" tasks** (subtasks <= 2, no dependencies, files <= 3). All other modes require Agent delegation.
+**Single-entity execution is only permitted for "micro" tasks** (single clear operation, ≤1 file, ≤10 lines changed, no verification needed). Any doubt → upgrade to standard mode with Agent team.
+
+**Parallelism cap**: Max 5 concurrent Agent instances per batch. If > 5 parallel tasks exist, split into batches with convergence checkpoints between them.
 
 ## Cross-Project Reuse
 

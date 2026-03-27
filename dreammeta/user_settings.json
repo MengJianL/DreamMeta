@@ -1,0 +1,45 @@
+{
+  "theme": {
+    "name": "Obsidian",
+    "colors": {
+      "base": "#0a0a0c",
+      "mantle": "#101014",
+      "crust": "#08080a",
+      "surface0": "#18181c",
+      "surface1": "#222228",
+      "surface2": "#2c2c34",
+      "overlay": "#3a3a44",
+      "overlay_light": "#48485a",
+      "text": "#e2e2e8",
+      "text_muted": "#6e6e82",
+      "text_subtle": "#52526a",
+      "accent": "#7b6cb7",
+      "accent_light": "#a99cd6",
+      "accent_dim": "#4a3f78",
+      "gold": "#c9a84c",
+      "green": "#5eb87a",
+      "amber": "#d4a44c",
+      "red": "#c95454",
+      "layer1_bg": "#0c1a2e",
+      "layer1_fg": "#5a9ec8",
+      "layer1_border": "#1a2e48",
+      "layer2_bg": "#2a1a0a",
+      "layer2_fg": "#c8985a",
+      "layer2_border": "#3e2a14",
+      "layer3_bg": "#0a2a1a",
+      "layer3_fg": "#5ac87a",
+      "layer3_border": "#143e28"
+    },
+    "fonts": {
+      "family": "Segoe UI Historic",
+      "fallback": "Microsoft YaHei",
+      "mono": "Consolas",
+      "size": 14,
+      "size_small": 13,
+      "size_large": 15,
+      "size_h1": 18,
+      "size_h2": 15,
+      "size_h3": 13
+    }
+  }
+}

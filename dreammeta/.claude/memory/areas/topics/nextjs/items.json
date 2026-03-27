@@ -1,0 +1,26 @@
+[
+  {
+    "id": "fact-20260316153805",
+    "fact": "{\"session_id\":\"5ae89653-5c7b-4fe5-8d32-a3cd7e6f9444\",\"transcript_path\":\"C:\\\\Users\\\\MECHREVO\\\\.claude\\\\projects\\\\C--Users-MECHREVO-Desktop-SideProject-MJ-CC-Project-Meta-Creates\\\\5ae89653-5c7b-4fe5-8d3",
+    "timestamp": "2026-03-16",
+    "status": "active"
+  },
+  {
+    "id": "fact-20260316164214",
+    "fact": "{\"session_id\":\"0ea7507d-e96a-40b5-a292-4877a8711c27\",\"transcript_path\":\"C:\\\\Users\\\\MECHREVO\\\\.claude\\\\projects\\\\C--Users-MECHREVO-Desktop-SideProject-MJ-CC-Project-Meta-Creates\\\\0ea7507d-e96a-40b5-a29",
+    "timestamp": "2026-03-16",
+    "status": "active"
+  },
+  {
+    "id": "fact-20260317141149",
+    "fact": "{\"session_id\":\"53d951d6-b707-4ec6-ad3c-fcf4f17c951a\",\"transcript_path\":\"C:\\\\Users\\\\MECHREVO\\\\.claude\\\\projects\\\\C--Users-MECHREVO-Desktop-SideProject-MJ-CC-Project-Meta-Creates\\\\53d951d6-b707-4ec6-ad3",
+    "timestamp": "2026-03-17",
+    "status": "active"
+  },
+  {
+    "id": "fact-20260317204943",
+    "fact": "f11d867e-8c5e-4a46-b7c5-b9c6aa922225",
+    "timestamp": "2026-03-17",
+    "status": "active"
+  }
+]
