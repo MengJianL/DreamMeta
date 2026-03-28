@@ -120,22 +120,29 @@ cp -r .claude/agents/ your-project/.claude/agents/
 ## Project Structure
 
 ```
-.claude/
-└── agents/
-    ├── CLAUDE.md           # Architecture index
-    ├── M01-memory.md       # Foundation: Memory
-    ├── M02-identity.md     # Foundation: Identity
-    ├── M03-channel.md      # Foundation: Channel
-    ├── M04-decompose.md    # Orchestration: Decompose
-    ├── M05-route.md        # Orchestration: Route
-    ├── M06-evaluate.md     # Orchestration: Evaluate
-    ├── M07-synthesize.md   # Orchestration: Synthesize
-    ├── M08-sequence.md     # Orchestration: Sequence
-    ├── M09-compose.md      # Execution: Compose (写)
-    ├── M10-retrieve.md     # Execution: Retrieve (查)
-    ├── M11-invoke.md       # Execution: Invoke (用)
-    ├── M12-verify.md       # Execution: Verify (检)
-    └── M13-create.md       # Execution: Create (创)
+Meta-Creates/
+├── .claude/
+│   ├── agents/                # 13 atoms + architecture index
+│   │   ├── CLAUDE.md          # Architecture index (总纲)
+│   │   ├── M01-memory.md      # Foundation: Memory
+│   │   ├── M02-identity.md    # Foundation: Identity
+│   │   ├── M03-channel.md     # Foundation: Channel
+│   │   ├── M04-decompose.md   # Orchestration: Decompose
+│   │   ├── M05-route.md       # Orchestration: Route
+│   │   ├── M06-evaluate.md    # Orchestration: Evaluate
+│   │   ├── M07-synthesize.md  # Orchestration: Synthesize
+│   │   ├── M08-sequence.md    # Orchestration: Sequence
+│   │   ├── M09-compose.md     # Execution: Compose (写)
+│   │   ├── M10-retrieve.md    # Execution: Retrieve (查)
+│   │   ├── M11-invoke.md      # Execution: Invoke (用)
+│   │   ├── M12-verify.md      # Execution: Verify (检)
+│   │   └── M13-create.md      # Execution: Create (创)
+│   └── commands/
+│       └── meta.md            # /meta slash command
+├── references/                    # Papers, prompt libraries, skill playbooks
+│   └── base/                      # Source paper + architecture diagrams
+├── CLAUDE.md                      # Project instructions for Claude Code
+└── README.md
 ```
 
 ## Contributors

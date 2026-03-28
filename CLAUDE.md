@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Meta_Creates is a **Meta-Department (元部门) architecture framework** — a 13-atom organizational system for autonomous agent coordination and governance. It implements the "Organizational Mirroring" theory from the reference paper (`Knowledge/LaoJin_paper.pdf`), providing a pure-abstract, domain-agnostic, self-evolving agent infrastructure.
+Meta_Creates is a **Meta-Department (元部门) architecture framework** — a 13-atom organizational system for autonomous agent coordination and governance. It implements the "Organizational Mirroring" theory from the reference paper (`references/base/LaoJin_paper.pdf`), providing a pure-abstract, domain-agnostic, self-evolving agent infrastructure.
 
 This is not a traditional software project with build/test commands. It is a **configuration-as-architecture** system where `.md` files define agent behaviors, and the structure itself is the product.
 
@@ -37,16 +37,6 @@ Detailed architecture index: `.claude/agents/CLAUDE.md`
 | `/meta <task>` | 元部门为项目创造 Agent：分析→检查/创造项目 Agent→按 Agent 定义执行→核验→评估→交付 |
 
 Defined in `.claude/commands/meta.md`.
-
-## DreamMeta (梦元) Desktop App
-
-`dreammeta/` contains a PySide6 desktop GUI for visualizing and managing the 13-atom architecture. See `dreammeta/CLAUDE.md` for detailed architecture.
-
-```bash
-cd dreammeta && pip install -e .
-dreammeta                # or: python -m dreammeta
-pytest tests/            # run tests
-```
 
 ## Skill Integration
 
@@ -97,8 +87,7 @@ When starting a new project, copy `.claude/agents/` (the 13 atoms + index). Do *
 
 ## Reference Materials
 
-- `Knowledge/base/LaoJin_paper.pdf` — source paper defining 8 architectural principles and 10-phase workflow
-- `Knowledge/base/2.png` — three-layer gravity structure visual
-- `Knowledge/base/1.png` — agent file structure reference
-- `Knowledge/` — also contains `agent-teams-playbook-main/`, `awesome-claude-prompts-main/`, `superpowers-main/` reference skills
-- `Renovation/` — design source documents for the 16-section template rewrite (术语表, 总览图表, 模板, M01-M13 specifications)
+- `references/base/LaoJin_paper.pdf` — source paper defining 8 architectural principles and 10-phase workflow
+- `references/base/2.png` — three-layer gravity structure visual
+- `references/base/1.png` — agent file structure reference
+- `references/` — also contains `agent-teams-playbook/`, `awesome-claude-prompts/`, `superpowers/` reference skills
