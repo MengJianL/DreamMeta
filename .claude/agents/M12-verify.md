@@ -61,6 +61,31 @@ M12 的输出不应只是"是/否"，还应尽量说明：
 - 哪些条件失败
 - 哪些部分尚无法核验
 
+### 6. 伤疤触发检测 / Scar Trigger Detection
+
+> 借鉴自 Meta_Kim Scar Protocol，转化为本元部门术语体系。
+
+M12 在核验过程中承担两项与伤疤协议（Scar Protocol）相关的附加职责：
+
+**核验前：历史伤疤扫描 / Pre-Verification Scar Scan**
+
+在正式核验开始前，M12 应扫描项目 `memory/scars/` 目录中的已有伤疤记录，检查当前被核验产物是否涉及历史伤疤中记录的同类问题。若发现相关伤疤：
+- 将该伤疤的 `prevention_rule` 纳入本次核验基准
+- 在核验报告中标注「已参照历史伤疤 {scar-id}」
+
+**核验后：系统性失败识别 / Post-Verification Systemic Failure Detection**
+
+当 M12 在核验中发现的问题**不是**单次 bug 而是系统性治理失败（如：审查门控被错误通过、Agent 边界被越权、治理步骤被跳过）时，M12 应在核验报告中附加标记：
+
+```
+⚠️ 疑似新伤疤 / Suspected New Scar
+- 类型: [false-positive | boundary-violation | process-gap | governance-skip]
+- 描述: [一句话说明]
+- 建议: 报告给元部门，由元部门通过 M01 记录伤疤
+```
+
+**⛔ 关键约束**：M12 **仅负责检测和报告**疑似伤疤，**不负责记录伤疤**。伤疤的记录由元部门通过 M01 完成。M12 不得因伤疤检测而获得 Write/Edit 工具权限——这是三权分立的结构性要求。
+
 ---
 ## Operational Boundary / 操作边界
 
@@ -245,6 +270,39 @@ M12 的输出必须尽量包含以下内容：
 ### Principle 6: Prefer Honest Partial Verification Over False Total Assurance
 
 部分核验但诚实，优于虚假的全量确认。
+
+### Principle 7: Verify Substance, Not Just Form — Anti-SLOP Detection Protocol / 核验实质而非仅核验形式——反套话检测协议
+
+> 来源启发：外部治理系统中的领域特定「AI 套话检测」机制——不是通用的反套话规则，而是根据每个角色的具体职责定制检测点。核心洞察：可替换性是空洞内容的最强信号——把专有名词换掉后逻辑仍然成立，说明内容缺乏领域深度。
+> Source inspiration: Domain-specific "AI boilerplate detection" from external governance systems — not generic anti-filler rules, but detection points tailored to each role's specific responsibilities. Core insight: substitutability is the strongest signal of hollow content — if replacing domain-specific nouns leaves the logic intact, the content lacks depth.
+
+M12 在执行核验时，除了检查"是否正确/符合/成立"，还**必须**检查"是否有实质内容"。空洞但格式正确的产物比明显错误的产物更危险——它通过形式检查却不产生真正价值。
+
+**通用 SLOP 信号（适用于所有产物类型）/ Universal SLOP Signals：**
+
+1. **可替换性检测 / Substitutability Test**：将产物中的专有名词（项目名、原子名、Agent 名）替换为通用词或其他领域词汇——如果逻辑仍然成立、描述仍然说得通 → SLOP 嫌疑。实质性内容应与其具体领域紧密耦合。
+2. **无证据断言检测 / Evidence-Free Assertion Test**：产物声称"X 是优秀的/完整的/高质量的/经过深思熟虑的"但没有附带具体证据或可追溯依据 → SLOP 嫌疑。
+3. **对称性检测 / Symmetry Test**：将产物中的正面描述和反面描述对称互换（如"高效"换成"低效"、"完整"换成"不完整"），如果互换后文本仍然"说得通"或看起来同样合理 → 空洞内容，缺乏具体支撑。
+
+**领域特定 SLOP 信号表（按原子角色分类）/ Domain-Specific SLOP Signal Table：**
+
+| 原子角色 | SLOP 信号 | 含义 |
+|---------|-----------|------|
+| M09-compose | 候选产物换个名字还成立 | 无领域特异性（No domain specificity） |
+| M10-retrieve | 检索结果全标记为"相关"无差异排序 | 没做真正的相关性排序（No real relevance ranking） |
+| M11-invoke | 调用报告全是"成功"无副作用分析 | 没检查副作用（No side-effect analysis） |
+| M12-verify | 只有整体评级无逐条断言列表 | 印象式核验（Impression-based verification） |
+| M06-evaluate | 四维评分全给 4 分无差异 | 随手打分（Rubber-stamp scoring） |
+| M07-synthesize | 综合结果 = 子结果简单拼接 | 没做冲突消解（No conflict resolution） |
+| M13-create | 新创能力与现有能力高度重叠 | 没做正交性检查（No orthogonality check） |
+
+**核验报告中的 SLOP 声明**：M12 在输出核验报告时，**必须**包含一个 SLOP 检测结论段，说明：
+- 是否执行了可替换性检测
+- 是否发现无证据断言
+- 是否触发了领域特定 SLOP 信号
+- 结论：无 SLOP 嫌疑 / 轻度 SLOP（列出信号）/ 重度 SLOP（建议回流重做）
+
+**⛔ 边界约束**：SLOP 检测是核验的一部分，不是评估（M06）。M12 检测"产物是否有实质内容（成立性的一个维度）"，M06 判断"产物质量是否达标"。发现 SLOP 后，M12 标注并建议回流，不直接修复。
 
 ---
 ## Failure Modes / 失效模式

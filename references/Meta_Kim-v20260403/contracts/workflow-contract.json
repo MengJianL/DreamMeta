@@ -1,0 +1,349 @@
+{
+  "schemaVersion": 1,
+  "owner": "Meta_Kim",
+  "businessWorkflow": {
+    "id": "business",
+    "distinctFromCanonicalSpine": true,
+    "canonicalExecutionSpineRef": "meta-theory Type C: Critical → Fetch → Thinking → Execution → Review → Meta-Review → Verification → Evolution (see .claude/skills/meta-theory/references/dev-governance.md). Business phase ids here are department-run vocabulary only; they do not rename or substitute spine stage names.",
+    "canonicalExecutionSpineStages": [
+      "critical",
+      "fetch",
+      "thinking",
+      "execution",
+      "review",
+      "meta_review",
+      "verification",
+      "evolution"
+    ],
+    "phases": [
+      "direction",
+      "planning",
+      "execution",
+      "review",
+      "meta_review",
+      "revision",
+      "verify",
+      "summary",
+      "feedback",
+      "evolve"
+    ],
+    "markerPhases": [
+      "meta_review",
+      "verify",
+      "evolve"
+    ],
+    "terminalPhases": [
+      "review",
+      "meta_review",
+      "verify",
+      "summary",
+      "feedback",
+      "evolve"
+    ],
+    "summaryPreference": [
+      "summary",
+      "verify",
+      "revision",
+      "execution",
+      "planning",
+      "direction"
+    ],
+    "labels": {
+      "zh-CN": {
+        "direction": "CEO方向",
+        "planning": "经理规划",
+        "execution": "执行产出",
+        "review": "经理评审",
+        "meta_review": "元部门审计",
+        "revision": "修改迭代",
+        "verify": "经理验证",
+        "summary": "经理汇总",
+        "feedback": "CEO反馈",
+        "evolve": "Agent进化"
+      },
+      "en-US": {
+        "direction": "CEO Direction",
+        "planning": "Manager Planning",
+        "execution": "Execution",
+        "review": "Manager Review",
+        "meta_review": "Meta Audit",
+        "revision": "Revision",
+        "verify": "Manager Verify",
+        "summary": "Manager Summary",
+        "feedback": "CEO Feedback",
+        "evolve": "Agent Evolution"
+      }
+    }
+  },
+  "metaWorkflow": {
+    "id": "meta",
+    "phases": [
+      "analyze",
+      "propose",
+      "report"
+    ],
+    "labels": {
+      "zh-CN": {
+        "analyze": "元分析",
+        "propose": "元提案",
+        "report": "元报告"
+      },
+      "en-US": {
+        "analyze": "Meta Analysis",
+        "propose": "Meta Proposal",
+        "report": "Meta Report"
+      }
+    }
+  },
+  "gates": {
+    "planning": {
+      "owner": "meta-conductor",
+      "passToken": "通过",
+      "reworkToken": "需重排"
+    },
+    "metaReview": {
+      "owners": [
+        "meta-warden",
+        "meta-prism"
+      ]
+    },
+    "verify": {
+      "owners": [
+        "meta-warden",
+        "meta-prism"
+      ]
+    },
+    "summary": {
+      "owner": "meta-warden",
+      "requiresVerifiedRun": true
+    }
+  },
+  "runDiscipline": {
+    "singleDepartmentPerRun": true,
+    "singlePrimaryDeliverable": true,
+    "rejectMultiTopicRuns": true,
+    "rejectDetachedWorkerTasks": true,
+    "requireClosedDeliverableChain": true,
+    "queryBypassRule": {
+      "onlyPureQueryMayBypassAgentOwner": true,
+      "pureQueryCriteria": [
+        "no_file_or_code_change",
+        "no_external_side_effect",
+        "no_durable_execution_artifact",
+        "no_downstream_handoff_required"
+      ]
+    },
+    "executionOwnership": {
+      "executionRequiresAgentOwner": true,
+      "anonymousExecutionForbidden": true,
+      "existingOwnerPreferred": true,
+      "createOwnerBeforeExecutionWhen": [
+        "recurring_capability_gap",
+        "project_specific_domain_gap",
+        "workflow_blocked_by_missing_declared_owner"
+      ],
+      "temporaryFallback": {
+        "allowed": true,
+        "subagentType": "generalPurpose",
+        "emergencyOnly": true,
+        "oneOffPreferred": true,
+        "requiresExplicitOwnerLabel": true,
+        "requiresJustification": true,
+        "requiresEvolutionReview": true
+      }
+    },
+    "parallelism": {
+      "mustParallelizeIndependentTasks": true,
+      "requiresDependencyDeclaration": true,
+      "requiresParallelGroup": true,
+      "requiresMergeOwner": true
+    },
+    "protocolFirst": {
+      "enabled": true,
+      "requiredPackets": [
+        "runHeader",
+        "dispatchBoard",
+        "workerTaskPacket",
+        "workerResultPacket",
+        "reviewPacket",
+        "verificationPacket",
+        "evolutionWritebackPacket"
+      ]
+    },
+    "reviewMustConsolidate": true,
+    "reviewOutputProtocol": {
+      "format": "deliverable-frontmatter",
+      "marker": "<!--deliverable",
+      "endMarker": "-->",
+      "requiredFields": ["title", "summary", "workers"],
+      "workersFields": ["name", "task"],
+      "separator": "---",
+      "sections": ["frontmatter", "consolidatedBody", "separator", "perWorkerScores"],
+      "description": "Review phase output must start with a deliverable frontmatter block containing title, summary, and worker roles in YAML. After the frontmatter, the consolidated deliverable body follows. A --- separator divides the body from per-worker scores."
+    },
+    "requiredRunHeader": [
+      "department",
+      "primaryDeliverable",
+      "audience",
+      "freshnessRequirement",
+      "visualPolicy",
+      "handoffPlan"
+    ],
+    "requiredWorkerFields": [
+      "todayTask",
+      "output",
+      "deliverableLink",
+      "qualityBar",
+      "referenceDirection",
+      "handoffTarget",
+      "lengthExpectation",
+      "visualOrAssetPlan",
+      "owner",
+      "ownerMode",
+      "dependsOn",
+      "parallelGroup",
+      "mergeOwner",
+      "taskPacketId"
+    ],
+    "evolutionWritebackRequired": true,
+    "evolutionWritebackTargets": [
+      ".claude/agents/",
+      ".claude/skills/",
+      "contracts/workflow-contract.json",
+      "memory/scars/",
+      "memory/capability-gaps.md"
+    ],
+    "publicDisplayRequires": [
+      "verifyPassed",
+      "summaryClosed",
+      "singleDeliverableMaintained",
+      "deliverableChainClosed",
+      "consolidatedDeliverablePresent"
+    ]
+  },
+  "protocols": {
+    "runHeader": {
+      "requiredFields": [
+        "department",
+        "primaryDeliverable",
+        "audience",
+        "freshnessRequirement",
+        "visualPolicy",
+        "handoffPlan"
+      ]
+    },
+    "dispatchBoard": {
+      "requiredFields": [
+        "boardId",
+        "goal",
+        "ownerResolution",
+        "primaryDeliverable",
+        "mergeStrategy"
+      ]
+    },
+    "workerTaskPacket": {
+      "requiredFields": [
+        "taskPacketId",
+        "owner",
+        "ownerMode",
+        "todayTask",
+        "output",
+        "deliverableLink",
+        "qualityBar",
+        "referenceDirection",
+        "handoffTarget",
+        "lengthExpectation",
+        "visualOrAssetPlan",
+        "dependsOn",
+        "parallelGroup",
+        "mergeOwner"
+      ]
+    },
+    "workerResultPacket": {
+      "requiredFields": [
+        "taskPacketId",
+        "owner",
+        "status",
+        "producedArtifacts",
+        "handoffTarget",
+        "blockingIssues"
+      ]
+    },
+    "reviewPacket": {
+      "requiredFields": [
+        "ownerCoverage",
+        "protocolCompliance",
+        "qualityGate",
+        "revisionNeeded",
+        "reviews"
+      ]
+    },
+    "verificationPacket": {
+      "requiredFields": [
+        "verified",
+        "remainingIssues",
+        "evidence",
+        "fixEvidence",
+        "closeFindings"
+      ]
+    },
+    "evolutionWritebackPacket": {
+      "requiredFields": [
+        "ownerAssessment",
+        "writebacks",
+        "scarIds",
+        "syncRequired"
+      ]
+    }
+  },
+  "departmentVisualPolicies": {
+    "game": {
+      "defaultMode": "generate_or_self_create",
+      "preferredSources": [
+        "ai-generated visual",
+        "self-created concept sketch",
+        "in-engine capture"
+      ],
+      "requiresVisualPairingFor": [
+        "campaign copy",
+        "event copy",
+        "promo narrative",
+        "worldbuilding brief"
+      ],
+      "fallbackMode": "reference_search_only_when_factual_material_is_required"
+    },
+    "ai": {
+      "defaultMode": "official_or_verified_reference",
+      "preferredSources": [
+        "official screenshot",
+        "official diagram",
+        "product UI capture",
+        "verified reference image"
+      ],
+      "requiresVisualPairingFor": [
+        "tool report",
+        "product comparison",
+        "launch writeup",
+        "model capability brief"
+      ],
+      "fallbackMode": "generate_original_explainer_visual_only_when_no_official_material_exists"
+    },
+    "default": {
+      "defaultMode": "fit_department_nature",
+      "preferredSources": [
+        "verified reference",
+        "self-created asset"
+      ],
+      "requiresVisualPairingFor": [
+        "public-facing copy",
+        "campaign output"
+      ],
+      "fallbackMode": "explicitly_declare_why_no_visual_deliverable_is_needed"
+    }
+  },
+  "freshness": {
+    "idealDays": 7,
+    "recentDays": 30,
+    "historicalDays": 180
+  }
+}

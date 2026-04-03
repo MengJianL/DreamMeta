@@ -152,6 +152,30 @@ M06 不应把一切治理问题都吸收为"评估问题"。
 
 该模式下，M06 应最大化与执行上下文隔离，尽量依据输入对象和标准而非执行叙事做判断。
 
+### 6. Standards Audit Mode / 标准审计模式
+
+> 来源启发：外部治理系统中的「元评审」机制——不审查产物质量，而是审查审查标准本身是否合理。核心洞察：通过弱断言的 PASS 比 FAIL 更危险——它制造虚假信心。
+> Source inspiration: "Meta-Review" mechanism from external governance systems — auditing the evaluation criteria themselves rather than the work product. Core insight: a PASS supported only by weak assertions is more dangerous than a FAIL — it creates false confidence.
+
+适用于：
+- 同一类型任务连续 3 次评估得分在 16-17 分（刚过线），暗示标准可能过于宽松
+- 连续高分（≥ 18）但用户反馈不满意，暗示标准与实际期望脱节
+- 通过率 > 0.9 但产出存在可观测问题 → 标准可能过松
+- 通过率 < 0.3 但产出看起来合理 → 标准可能过严
+- 评估标准与历史同类评估差异 > 30% → 标准漂移风险
+
+审计内容：
+1. **维度权重匹配性 / Dimension Weight Fitness**：评估维度（准确性/完整性/可操作性/格式）的权重是否与当前任务类型匹配——格式密集型任务不应和创意型任务使用相同权重分布
+2. **弱断言检测 / Weak Assertion Detection**：是否存在"每个维度都给了 4 分但没有具体证据支撑"的现象——均匀高分无差异是随手打分的典型信号
+3. **标准漂移检测 / Criteria Drift Detection**：当前评估标准是否与历史同类评估对比发生显著偏移——若偏移但无显式理由，则为无意识漂移
+
+产出：标准审计报告（Standards Audit Report），包含：
+- 当前使用的评估标准摘要
+- 发现的问题（弱断言、漂移、权重失配等）
+- 建议调整方向
+
+**⛔ 边界约束**：M06 只产出标准审计报告，**不自行修改评估标准**——标准调整需上报给元部门决策层。M06 审计标准，但不裁决标准的最终形态。
+
 ---
 ## Independence Protocol / 独立性协议
 

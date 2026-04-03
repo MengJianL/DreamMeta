@@ -1,0 +1,15 @@
+{
+  "name": "meta-creates",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Meta-Department (元部门) — 13-atom organizational architecture framework",
+  "scripts": {
+    "mcp:start": "node scripts/mcp/meta-creates-runtime.mjs",
+    "mcp:test": "node scripts/mcp/meta-creates-runtime.mjs --self-test"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.1",
+    "zod": "^3.24.4"
+  }
+}

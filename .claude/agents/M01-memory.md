@@ -418,6 +418,57 @@ M01 的演化重点应放在：
 M01 不应通过无限扩张记忆范围来增强自己；
 它的增强应表现为组织连续性质量提升，而不是信息囤积规模增长。
 
+### 伤疤协议 / Scar Protocol
+
+> 借鉴自 Meta_Kim Scar Protocol，转化为本元部门术语体系。
+
+**定义 / Definition**：伤疤（Scar）是对治理层级系统性失败的永久记录。伤疤不同于临时调试笔记或单次异常记忆——它记录的是暴露了治理机制结构性弱点的失败，且这些失败会回馈到后续治理决策中，防止系统重蹈覆辙。
+
+**记录时机 / When to Record**：
+
+以下情形应触发伤疤记录：
+- **审查门控假阳性 / False Positive Gate**：核验（M12）或评估（M06）通过了本不应通过的产物，问题在后续暴露
+- **Agent 边界越权 / Boundary Violation**：某 Agent 越过其职责边界，侵入其他 Agent 的职责域
+- **治理步骤被跳过 / Governance Skip**：元部门跳过了必要的治理步骤（如跳过 Phase B 直接执行），导致回归问题
+- **路由假设错误 / Routing Assumption Failure**：M05 路由时的能力假设被证实错误
+- **流程缺口 / Process Gap**：治理流程中不存在对某类失败的响应钩子，导致问题无法被正常捕获
+
+**不记录 / Do NOT Record**：
+- 单次编码 bug（属于正常执行错误）
+- 外部服务故障（不属于治理体系控制范围）
+- 用户操作错误（不属于治理体系失败）
+
+**记录格式 / Record Schema**（YAML）：
+
+```yaml
+scar:
+  id: "{YYYY-MM}-{type}-{short-desc}"   # 例：2026-04-false-positive-verify-gate
+  type: false-positive | boundary-violation | process-gap | governance-skip
+  date: YYYY-MM-DD
+  triggered_by: "{暴露伤疤的上下文}"
+  what_happened: "一句话描述"
+  root_cause: "治理层级的根因分析（非表象症状）"
+  impact: none | degraded | recovered | critical
+  prevention_rule: "下次的具体预防规则"
+  closed_by: "{负责关闭的原子或角色}"
+```
+
+**生命周期 / Lifecycle**：
+1. **检测 / Detect**：核验（M12）、评估（M06）或元部门编排过程中识别出系统性失败
+2. **记录 / Record**：由元部门通过 M01 将伤疤写入 `memory/scars/{id}.md`
+3. **分类 / Classify**：确定 `type` 和 `impact`
+4. **触发规则更新 / Trigger Rule Update**：若 `impact: recovered | critical`，触发相关原子定义或治理规则的更新审视
+5. **后续任务审计 / Audit**：在未来任务的核验阶段，扫描 `memory/scars/` 检查是否存在相关历史伤疤
+
+**存储位置 / Storage**：
+```
+memory/
+└── scars/
+    └── {YYYY-MM}-{type}-{short-desc}.md
+```
+
+**与 M01 其他记忆类别的关系**：伤疤属于「异常记忆 / Exception Memory」的一个特殊子类，但其生命周期更严格——伤疤是**永久性**记录，不适用常规的老化（Aging）或退役（Retirement）机制。伤疤只能被标记为「已缓解」（prevention_rule 已生效），但不能被删除。
+
 ---
 
 ## Minimal Governance Statement / 最小治理声明
