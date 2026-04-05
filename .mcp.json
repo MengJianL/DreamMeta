@@ -1,9 +1,9 @@
 {
   "mcpServers": {
-    "meta-creates-runtime": {
+    "dreammeta-runtime": {
       "type": "stdio",
       "command": "node",
-      "args": ["scripts/mcp/meta-creates-runtime.mjs"]
+      "args": ["scripts/mcp/dreammeta-runtime.mjs"]
     }
   }
 }

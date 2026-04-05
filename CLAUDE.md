@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Meta_Creates is a **Meta-Department (元部门) architecture framework** — a 13-atom organizational system for autonomous agent coordination and governance. It implements the "Organizational Mirroring" theory from the reference paper (`references/base/LaoJin_paper.pdf`), providing a pure-abstract, domain-agnostic, self-evolving agent infrastructure.
+DreamMeta is a **Meta-Department (元部门) architecture framework** — a 13-atom organizational system for autonomous agent coordination and governance. It implements the "Organizational Mirroring" theory from the reference paper (`references/base/LaoJin_paper.pdf`), providing a pure-abstract, domain-agnostic, self-evolving agent infrastructure.
 
 This is not a traditional software project with build/test commands. It is a **configuration-as-architecture** system where `.md` files define agent behaviors, and the structure itself is the product.
 

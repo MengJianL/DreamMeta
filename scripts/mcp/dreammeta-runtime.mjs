@@ -1,13 +1,13 @@
 /**
- * meta-creates-runtime — MCP Server for Meta-Department (元部门)
+ * dreammeta-runtime — MCP Server for Meta-Department (元部门)
  *
  * Exposes the 13-atom architecture assets via Model Context Protocol:
  *   Resources: architecture-index, meta-command
  *   Tools:     list_atoms, get_atom
  *
  * Transport: stdio (local process communication)
- * Usage:     node scripts/mcp/meta-creates-runtime.mjs
- * Self-test: node scripts/mcp/meta-creates-runtime.mjs --self-test
+ * Usage:     node scripts/mcp/dreammeta-runtime.mjs
+ * Self-test: node scripts/mcp/dreammeta-runtime.mjs --self-test
  */
 
 import { promises as fs } from "node:fs";
@@ -150,7 +150,7 @@ async function selfTest() {
 
   const result = {
     ok: true,
-    server: "meta-creates-runtime",
+    server: "dreammeta-runtime",
     version: "1.0.0",
     resources: {
       count: 0,
@@ -171,14 +171,14 @@ async function selfTest() {
   // Check resources
   if (architectureIndex) {
     result.resources.count++;
-    result.resources.list.push("meta-creates://architecture-index");
+    result.resources.list.push("dreammeta://architecture-index");
   } else {
     result.issues.push("MISSING: .claude/agents/CLAUDE.md");
   }
 
   if (metaCommand) {
     result.resources.count++;
-    result.resources.list.push("meta-creates://meta-command");
+    result.resources.list.push("dreammeta://meta-command");
   } else {
     result.issues.push("MISSING: .claude/commands/meta.md");
   }
@@ -220,7 +220,7 @@ async function main() {
   await preloadAssets();
 
   const server = new McpServer({
-    name: "meta-creates-runtime",
+    name: "dreammeta-runtime",
     version: "1.0.0",
   });
 
@@ -228,7 +228,7 @@ async function main() {
 
   server.resource(
     "architecture-index",
-    "meta-creates://architecture-index",
+    "dreammeta://architecture-index",
     {
       description:
         "Meta-Department architecture index (元部门架构索引) — the core governance document defining the 13-atom system, three-layer gravity structure, and runtime binding rules.",
@@ -249,7 +249,7 @@ async function main() {
 
   server.resource(
     "meta-command",
-    "meta-creates://meta-command",
+    "dreammeta://meta-command",
     {
       description:
         "Meta-Department /meta command definition (元部门 /meta 命令) — the workflow definition for invoking the Meta-Department orchestration chain.",
@@ -385,6 +385,6 @@ async function main() {
 }
 
 main().catch((err) => {
-  console.error("meta-creates-runtime fatal:", err);
+  console.error("dreammeta-runtime fatal:", err);
   process.exit(1);
 });

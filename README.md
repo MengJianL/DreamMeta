@@ -1,6 +1,6 @@
 <div align="center">
 
-# Meta-Creates 元部门
+# DreamMeta 梦元
 
 **A 13-atom organizational architecture for autonomous AI agent governance**
 
@@ -16,13 +16,13 @@
 
 ---
 
-## What is Meta-Creates?
+## What is DreamMeta?
 
-Meta-Creates is a **Meta-Department (元部门)** — an organizational pattern for AI agent systems inspired by real-world corporate structures. Instead of monolithic prompts or ad-hoc agent chains, it decomposes agent coordination into **13 irreducible atomic units** arranged in a three-layer gravity structure.
+DreamMeta is a **Meta-Department (元部门)** — an organizational pattern for AI agent systems inspired by real-world corporate structures. Instead of monolithic prompts or ad-hoc agent chains, it decomposes agent coordination into **13 irreducible atomic units** arranged in a three-layer gravity structure.
 
 The Meta-Department is a **"tool that creates tools"** (创造工具的工具). Its primary output is **Project Agent definitions**, not work deliverables — the department creates tools, then uses those tools to do work.
 
-### Why Meta-Creates?
+### Why DreamMeta?
 
 - **Governance-first** — Every atom answers: what am I, what am I not, how am I governed, how do I evolve
 - **Pure-abstract** — No domain-specific vocabulary; drop into any project and it works
@@ -182,7 +182,7 @@ Each Project Agent is **triple-armed** (Prompt + Skill + Tools) with a **9-secti
 ## Project Structure
 
 ```
-Meta-Creates/
+DreamMeta/
 ├── .claude/
 │   ├── agents/              # 13 atoms + architecture index (CLAUDE.md)
 │   └── commands/            # /meta slash command
