@@ -1,0 +1,273 @@
+{
+  "runHeader": {
+    "department": "engineering",
+    "primaryDeliverable": "auth-refresh-hardening",
+    "audience": "developer",
+    "freshnessRequirement": "current-repo-state",
+    "visualPolicy": "fit_department_nature",
+    "handoffPlan": "merge owner closes one consolidated deliverable after verification"
+  },
+  "taskClassification": {
+    "taskClass": "A",
+    "requestClass": "execute",
+    "governanceFlow": "complex_dev",
+    "triggerReasons": [
+      "multi_file",
+      "durable_artifact",
+      "verification_required"
+    ],
+    "upgradeReasons": [
+      "review_or_verify_required",
+      "parallel_merge_required"
+    ],
+    "bypassReasons": [],
+    "ownerRequired": true,
+    "decisionSource": "classifier-v2",
+    "classifierVersion": "v2",
+    "complexity": "medium"
+  },
+  "intentPacket": {
+    "trueUserIntent": "Harden refresh-token handling so secrets never live inline in source; one consolidated deliverable for the auth module.",
+    "successCriteria": "Tests pass with env-only secrets; review finding finding-001 can be verified_closed; run artifact validates with npm run validate:run.",
+    "nonGoals": "No unrelated auth flows (login UI, OAuth providers); no production deploy in this run.",
+    "intentPacketVersion": "v1"
+  },
+  "intentGatePacket": {
+    "ambiguitiesResolved": true,
+    "requiresUserChoice": false,
+    "defaultAssumptions": [
+      "Scope is the existing auth refresh path only; no new identity providers.",
+      "Secrets load from environment in test and CI as today."
+    ],
+    "intentGatePacketVersion": "v1"
+  },
+  "cardPlanPacket": {
+    "dealerOwner": "meta-conductor",
+    "dealerMode": "conductor-primary-warden-escalation",
+    "cards": [
+      {
+        "cardId": "card-clarify",
+        "cardType": "info",
+        "cardIntent": "clarify",
+        "cardDecision": "deal",
+        "cardAudience": "user",
+        "cardTiming": "immediate",
+        "cardShell": "conversation",
+        "cardPriority": 9,
+        "cardReason": "scope must be explicit before cross-file auth changes",
+        "cardSource": "meta-conductor",
+        "cardSuppressed": false,
+        "suppressionReason": "",
+        "deliveryShellId": "shell-structured-status"
+      },
+      {
+        "cardId": "card-risk",
+        "cardType": "risk",
+        "cardIntent": "risk_surface",
+        "cardDecision": "deal",
+        "cardAudience": "governance",
+        "cardTiming": "on_risk",
+        "cardShell": "summary",
+        "cardPriority": 10,
+        "cardReason": "token refresh touches auth boundary",
+        "cardSource": "meta-sentinel",
+        "cardSuppressed": false,
+        "suppressionReason": "",
+        "deliveryShellId": "shell-review-delta"
+      },
+      {
+        "cardId": "card-silence",
+        "cardType": "silence",
+        "cardIntent": "silence",
+        "cardDecision": "defer",
+        "cardAudience": "user",
+        "cardTiming": "after_dependency",
+        "cardShell": "silent_hold",
+        "cardPriority": 4,
+        "cardReason": "avoid pushing another intervention while verification is running",
+        "cardSource": "meta-conductor",
+        "cardSuppressed": true,
+        "suppressionReason": "verification_pending",
+        "deliveryShellId": "shell-quiet"
+      }
+    ],
+    "deliveryShells": [
+      {
+        "deliveryShellId": "shell-structured-status",
+        "shellType": "structured_status",
+        "presentationMode": "direct",
+        "exposureLevel": "internal",
+        "interventionForm": "conversation",
+        "audience": "developer",
+        "contentBoundary": "status + next action only"
+      },
+      {
+        "deliveryShellId": "shell-review-delta",
+        "shellType": "review_delta",
+        "presentationMode": "digest",
+        "exposureLevel": "review",
+        "interventionForm": "task_packet",
+        "audience": "reviewer",
+        "contentBoundary": "finding + evidence + closure target"
+      },
+      {
+        "deliveryShellId": "shell-quiet",
+        "shellType": "one_line",
+        "presentationMode": "quiet",
+        "exposureLevel": "internal",
+        "interventionForm": "none",
+        "audience": "user",
+        "contentBoundary": "suppress until verification result"
+      }
+    ],
+    "silenceDecision": {
+      "silenceDecision": "defer",
+      "noInterventionPreferred": true,
+      "interruptionJustified": false,
+      "deferUntil": "verification-complete",
+      "reasonForSilence": "no clear intervention gain while reviewer is verifying the fix"
+    },
+    "controlDecisions": [
+      {
+        "decisionId": "ctl-001",
+        "decisionType": "interrupt",
+        "skipReason": "",
+        "interruptReason": "security_risk",
+        "overrideReason": "",
+        "insertedGovernanceOwner": "meta-sentinel",
+        "emergencyGovernanceTriggered": true,
+        "returnsToStage": "verification",
+        "rejoinCondition": "security-sensitive auth diff has been reviewed"
+      }
+    ],
+    "defaultShellId": "shell-structured-status"
+  },
+  "dispatchBoard": {
+    "boardId": "dispatch-001",
+    "goal": "stabilize refresh token behavior and close one security finding",
+    "ownerResolution": "existing-owner",
+    "primaryDeliverable": "auth-refresh-hardening",
+    "mergeStrategy": "merge owner consolidates worker artifacts into one deliverable"
+  },
+  "workerTaskPackets": [
+    {
+      "taskPacketId": "task-001",
+      "owner": "meta-conductor",
+      "ownerMode": "existing-owner",
+      "todayTask": "update refresh token path and document verification hooks",
+      "output": "code diff + verification notes",
+      "deliverableLink": "auth-refresh-hardening:token-refresh",
+      "qualityBar": "no hardcoded secret and review finding fully closable",
+      "referenceDirection": "follow auth boundary rules",
+      "handoffTarget": "meta-prism",
+      "lengthExpectation": "targeted multi-file change",
+      "visualOrAssetPlan": "none",
+      "dependsOn": [],
+      "parallelGroup": "auth-core",
+      "mergeOwner": "meta-warden"
+    }
+  ],
+  "workerResultPackets": [
+    {
+      "taskPacketId": "task-001",
+      "owner": "meta-conductor",
+      "status": "completed",
+      "producedArtifacts": [
+        "src/auth/refresh.ts",
+        "tests/auth/refresh.test.ts"
+      ],
+      "handoffTarget": "meta-prism",
+      "blockingIssues": []
+    }
+  ],
+  "reviewPacket": {
+    "ownerCoverage": "PASS",
+    "protocolCompliance": "PASS",
+    "qualityGate": "FAIL",
+    "revisionNeeded": true,
+    "reviews": [
+      {
+        "type": "security",
+        "agent": "meta-sentinel",
+        "result": "FAIL",
+        "issues": [
+          "refresh token fallback still accepted an inline secret"
+        ]
+      }
+    ],
+    "findings": [
+      {
+        "findingId": "finding-001",
+        "severity": "high",
+        "owner": "meta-sentinel",
+        "summary": "refresh token fallback still accepted an inline secret",
+        "requiredAction": "remove inline secret fallback and require env-based secret resolution",
+        "fixArtifact": "src/auth/refresh.ts",
+        "verifiedBy": "meta-prism",
+        "closeState": "open"
+      }
+    ]
+  },
+  "verificationPacket": {
+    "verified": true,
+    "remainingIssues": [],
+    "evidence": [
+      "tests/auth/refresh.test.ts passes with env-only secret flow"
+    ],
+    "fixEvidence": [
+      "src/auth/refresh.ts removed inline secret fallback"
+    ],
+    "revisionResponses": [
+      {
+        "findingId": "finding-001",
+        "actionId": "fix-001",
+        "owner": "meta-conductor",
+        "responseType": "code-change",
+        "status": "applied",
+        "fixArtifact": "src/auth/refresh.ts",
+        "responseSummary": "refresh path now resolves secrets from environment only"
+      }
+    ],
+    "verificationResults": [
+      {
+        "findingId": "finding-001",
+        "verifiedBy": "meta-prism",
+        "result": "pass",
+        "evidence": [
+          "src/auth/refresh.ts no longer contains inline fallback secret"
+        ],
+        "closeState": "verified_closed"
+      }
+    ],
+    "closeFindings": [
+      "finding-001"
+    ]
+  },
+  "summaryPacket": {
+    "verifyPassed": true,
+    "summaryClosed": true,
+    "singleDeliverableMaintained": true,
+    "deliverableChainClosed": true,
+    "consolidatedDeliverablePresent": true,
+    "publicReady": true,
+    "commentReviewAcknowledged": true,
+    "deliveryShellsUsed": [
+      "shell-structured-status",
+      "shell-review-delta"
+    ],
+    "blockedBy": []
+  },
+  "evolutionWritebackPacket": {
+    "ownerAssessment": "keep-existing",
+    "writebackDecision": "writeback",
+    "decisionReason": "auth hardening pattern should be captured as a governance example",
+    "writebacks": [
+      {
+        "target": "contracts/workflow-contract.json",
+        "reason": "run artifact closure expectations tightened"
+      }
+    ],
+    "scarIds": [],
+    "syncRequired": true
+  }
+}
