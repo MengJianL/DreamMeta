@@ -207,6 +207,19 @@ M04 的输出必须尽量包含以下内容：
 
 输出应足以让 M05、M08、M06 或执行层原子继续接手，而不需要重新从整体目标猜测结构。
 
+### 6. Constraint Type Annotation / 约束类型标注
+
+拆解产出的每个子任务描述中，**必须**标注该子任务涉及的约束类型。未标注约束类型的子任务 = 拆解不完整 → M12 核验时将标记为缺失项。
+
+| 约束类型 / Constraint Type | 说明 | 示例 |
+|---|---|---|
+| 白名单 / Whitelist | 只允许枚举项，禁止其他 | "Experience 栏目只允许写入以下内容：[枚举]" |
+| 数值 / Numeric | 具体量化值，可精确验证 | "头像尺寸 = 96px，间距 = 16px" |
+| 格式 / Format | 输出结构与模板要求 | "必须包含 ASCII mockup" |
+| 行为 / Behavioral | 执行过程约束 | "必须先读取用户输入再生成" |
+
+每个子任务可标注一个或多个约束类型。若某子任务确实无显式约束，应标注"无显式约束 / No explicit constraint"并说明原因，而非留空。
+
 ---
 
 ## Decision Principles / 决策原则
@@ -234,6 +247,14 @@ M04 的输出必须尽量包含以下内容：
 ### Principle 6: Prefer Explicit Uncertainty Over False Precision
 
 若拆解依据不足，应保留不确定性，而不是伪精确地切出一组看似完整的子任务。
+
+### Principle 7: Whitelist over Blacklist / 白名单优于黑名单
+
+拆解约束时**优先**使用"只允许 X"（白名单）而非"禁止 Y"（黑名单）。黑名单对 LLM 几乎无约束力——"请不要编造"不会阻止编造发生。有效约束 = 白名单枚举 + 具体数值 + 独立核验。
+
+When decomposing constraints, **prefer** "only allow X" (whitelist) over "do not Y" (blacklist). Blacklists have near-zero enforcement power on LLMs — "please don't fabricate" will not prevent fabrication. Effective constraints = whitelist enumeration + concrete numeric values + independent verification.
+
+**核心洞察 / Core Insight**: 原则性声明（"请不要 X"）对 LLM 无约束力。只有白名单枚举、具体数值和独立核验三者结合才能构成真正有效的约束。
 
 ---
 

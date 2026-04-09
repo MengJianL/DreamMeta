@@ -37,6 +37,28 @@ M06 依据明确或可显化的标准，对对象进行多维评分。
 每项 0–5 分，总分 20，16/20 为通过阈值。
 M06 可在此基础上附加任务特定维度，但不得绕开核心质量刻度。
 
+#### Optional Evaluation Dimension: User Constraint Compliance / 可选评估维度：用户约束遵从度
+
+> 来源启发：实际项目中出现"评估满分但用户否决"的案例——根因是评估维度未覆盖用户在任务描述中显式声明的约束条件。
+> Source: Cases where evaluation scored full marks but the user rejected the output — root cause was that evaluation dimensions did not cover constraints explicitly stated by the user in the task description.
+
+**激活条件 / Activation Condition**：当任务输入中存在用户明确声明的约束条件时，此维度**自动激活**，作为核心四维评分之外的**附加评估维度**（0–5 分，不计入 20 分总分，独立报告）。
+
+**约束来源 / Constraint Sources**：
+- 用户明确声明的禁止项（如"不得删除现有内容"）
+- 用户声明的允许项 / 白名单（如"只允许修改 X 部分"）
+- 数值限制（如"不超过 N 个"、"至少包含 M 项"）
+- 格式要求（如"保持双语"、"保持模板结构不变"）
+- 任何以"必须"、"禁止"、"不得"等限定词标记的条件
+
+**评分标准 / Scoring Criteria**：
+- 5：所有用户约束被完全遵守，无一违反 / All user constraints fully respected, zero violations
+- 3–4：大部分约束遵守，个别非关键约束有偏差 / Most constraints respected, minor deviations on non-critical ones
+- 1–2：关键约束被违反 / Critical constraints violated
+- 0：用户约束被系统性忽略 / User constraints systematically ignored
+
+**报告方式 / Reporting**：当此维度激活时，M06 的输出中**必须**包含独立的「用户约束遵从度」评分段落，列出每条约束及其遵守状态。即使核心四维评分达到通过阈值，若用户约束遵从度 ≤ 2，M06 应在裁决中标注「⚠ 用户约束风险」并建议回流修复。
+
 ### 3. Pass/Fail Governance Decision / 通过—不通过治理裁决
 
 M06 的关键输出不是"我觉得还行"，而是：
@@ -318,6 +340,12 @@ M06 的输出必须尽量包含以下内容：
 ### 6. Governance Inflation / 治理膨胀
 
 M06 以"我是评估"为名，逐渐变成终极总管。
+
+### 7. Full-Score Rejection Paradox / 满分否决悖论
+
+评估满分（如 20/20）但用户否决产出 → 评估维度未覆盖用户约束遵从度 → 评估与用户期望脱节。
+A full-score evaluation (e.g., 20/20) is rejected by the user → evaluation dimensions did not cover user constraint compliance → evaluation disconnected from user expectations.
+**修复方向**：检查是否激活了「用户约束遵从度」可选维度；若任务输入中存在显式约束但评估未覆盖，属于评估维度遗漏而非评分错误。
 
 ---
 ## Quality Criteria / 质量标准

@@ -174,6 +174,19 @@ created: [日期]
 ### 上下文隔离要求
 [是否可引用其他 Agent 的产物、是否必须独立上下文执行]
 
+### 约束表达原则 / Constraint Expression Principles
+> 来源洞察：项目实战反思——原则性声明（"请不要X"）对 LLM 几乎无约束力，有效约束 = 白名单枚举 + 具体数值 + 独立核验。
+> Source insight: Project reflection — principled statements ("please don't X") have near-zero enforcement on LLMs. Effective constraints = whitelist enumeration + concrete numeric values + independent verification.
+
+Agent 定义中的约束**必须**优先使用白名单模式：
+- ✅ 白名单（推荐）："Experience 栏目**只允许**写入以下内容：[枚举]"
+- ❌ 黑名单（避免）："**不得**编造用户未提供的经历"
+- ✅ 具体数值："头像尺寸 = 96px"
+- ❌ 模糊声明："头像不要太大"
+
+每条约束**必须**满足可验证性：M12 核验时能逐项对照检查。
+无法逐项验证的约束 = 无效约束。
+
 ## 质量标准
 
 ### 量化验收条件
@@ -244,6 +257,17 @@ created: [日期]
 3. 输入验证规则中引用上游依赖时，**必须**基于抽象契约（如"符合诊断报告契约的报告"）而非具名 Agent（如"XX-Agent 的报告"）
 4. 质量标准中的验收条件**必须**使用参数化表达（如"所有指定资产都已暴露"）而非具体数量（如"暴露了 13 个原子"）
 5. **五标准快速自检**：创建完成后，对照「独立 Independent」和「可复用 Reusable」两项标准自检——若 Agent 定义换一个项目无法直接使用（需修改具体名称/路径），则违反抽象纯度
+
+### Agent 命名规范 / Agent Naming Convention
+> 来源洞察：项目 Agent 命名应体现原子映射关系，而非人类职业标签，以保持纯抽象性。
+
+| 模式 | 示例 | 适用性 |
+|------|------|--------|
+| ✅ `[角色]-Agent` 基于功能抽象 | `Content-Composer-Agent`、`Governance-Verifier-Agent` | 推荐 |
+| ⚠️ `M##-[角色]-Agent` 显式原子映射 | `M09-Content-Agent`、`M12-Verify-Agent` | 可选（当需要强调原子归属时） |
+| ❌ 人类职业标签 | `Frontend-Engineer-Agent`、`Content-Writer-Agent` | 禁止——违反纯抽象原则 |
+
+命名应体现功能本质而非领域身份。抽象命名 ≠ 含糊命名。
 
 ### 复用优先原则
 

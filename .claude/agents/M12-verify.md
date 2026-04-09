@@ -61,7 +61,36 @@ M12 的输出不应只是"是/否"，还应尽量说明：
 - 哪些条件失败
 - 哪些部分尚无法核验
 
-### 6. 伤疤触发检测 / Scar Trigger Detection
+### 6. 标准核验维度 / Standard Verification Dimensions
+
+> 来源启发：项目实战中发现核验仅覆盖"文案完整性""构建通过"等表层维度，遗漏了事实性（Agent 编造用户经历）、设计-实现一致性（实现数值偏离规范）、用户约束遵从性等深层维度。以下三类维度作为 M12 的扩展核验清单，在满足触发条件时**必须**纳入核验范围。
+> Source: Real-world project failures revealed that verification covering only "content completeness" and "build passes" misses deeper dimensions — factuality (Agents fabricating user experiences), specification compliance (implementation values deviating from design specs), and constraint compliance (violating user-stated restrictions). The following three dimensions extend M12's verification checklist and **must** be included when trigger conditions are met.
+
+| 维度 Dimension | 检查内容 What to Check | 触发条件 Trigger Condition |
+|---------------|----------------------|--------------------------|
+| **事实性核验 / Factuality Check** | 所有内容是否有用户输入依据；是否存在无来源的信息补全（fabrication）。核验方法：逐条追溯产出中的事实性声明至用户原始输入——无法追溯的即为 fabrication 嫌疑 | 产出涉及用户事实信息时（人物经历、项目数据、时间线、个人背景等） |
+| **规范一致性核验 / Specification Compliance** | 实现是否严格匹配设计规范的具体数值（尺寸、间距、色值、格式、字数等），而非仅"大致符合" | 产出有对应的设计规范、mockup、style guide 或明确数值要求时 |
+| **约束遵从性核验 / Constraint Compliance** | 用户明确声明的禁止项和限制条件是否被违反。核验方法：提取任务上下文中所有用户约束声明，逐条对照产出检查 | 任务中存在用户声明的约束（禁止项、限制条件、排除要求等）时 |
+
+**⛔ 关键约束**：事实性核验（Factuality Check）具有**最高优先级**——当产出涉及用户事实信息时，事实性核验失败即整体不通过，不可被其他维度的通过所弥补。编造用户未提供的事实信息是最严重的核验失败类型。
+
+#### Fabrication 严重度分级 / Fabrication Severity Classification
+
+| 级别 / Level | 名称 / Name | 定义 / Definition | 示例 / Example | 处理方式 / Handling |
+|---|---|---|---|---|
+| **critical** | 硬性捏造 / Hard Fabrication | 原文完全未提及的事实、经历、数据、资质被添加到产出中 | 原文未提及任何奖项，产出中出现"获XX奖" | **阻断通过** — 必须回流修复，不可降级处理 |
+| **warning** | 程度放大 / Degree Amplification | 原文信息存在但被夸大、升级或改变了程度/性质 | 原文"做过一些教育类项目"→产出"深耕教育领域" | **标记警告** — 不自动阻断，但必须在核验报告中标注，由评估 Agent 判定是否可接受 |
+| **info** | 修辞润色 / Rhetorical Polish | 未改变事实含义，仅在表达层面进行了修辞优化 | 原文"擅长界面设计"→产出"专注界面设计" | **记录但不阻断** — 在核验报告中记录，不影响通过判定 |
+
+**分级判定规则 / Classification Rules：**
+1. 判定顺序：先排除 info（纯修辞无事实变化），再区分 critical 与 warning
+2. 区分 critical 与 warning 的核心标准：**原文中是否存在可追溯的信息源头**
+   - 有源头但被放大 → warning
+   - 无源头（凭空出现） → critical
+3. 存疑时**必须**上升一级（info 疑似 warning → 按 warning 处理；warning 疑似 critical → 按 critical 处理）
+4. 同一产出中存在多条 fabrication 时，整体判定取最高级别
+
+### 7. 伤疤触发检测 / Scar Trigger Detection
 
 > 借鉴自 Meta_Kim Scar Protocol，转化为本元部门术语体系。
 
@@ -271,7 +300,21 @@ M12 的输出必须尽量包含以下内容：
 
 部分核验但诚实，优于虚假的全量确认。
 
-### Principle 7: Verify Substance, Not Just Form — Anti-SLOP Detection Protocol / 核验实质而非仅核验形式——反套话检测协议
+### Principle 7: Factuality Check Has Absolute Priority / 事实性核验具有绝对优先级
+
+> 来源启发：项目实战中 Agent 编造用户经历并通过核验——事后发现是因为核验未包含 fabrication check。
+> Source: In a real project, an Agent fabricated user experiences and passed verification — post-mortem revealed verification lacked a fabrication check.
+
+当产出涉及用户事实信息（人物经历、项目数据、时间线、个人背景等）时，事实性核验（Factuality Check）具有**绝对优先级**：
+- 事实性核验失败 → 整体不通过，无论其他维度表现如何
+- 不可被格式正确、结构完整、约束遵从等其他维度的通过所弥补
+- fabrication（编造无来源的事实信息）是核验可放行的**最严重**错误类型——比格式错误、结构缺陷更危险，因为其不可逆且会扩散
+
+M12 在涉及用户事实信息的核验中，**必须**显式执行 fabrication check 并在核验报告中声明检查结果。
+
+Fabrication 检查现采用三级分类（见 Section 6 "Fabrication 严重度分级"）：critical 级别阻断通过，warning 级别标记但由 M06 裁决，info 级别记录不阻断。存疑时必须上升一级。
+
+### Principle 8: Verify Substance, Not Just Form — Anti-SLOP Detection Protocol / 核验实质而非仅核验形式——反套话检测协议
 
 > 来源启发：外部治理系统中的领域特定「AI 套话检测」机制——不是通用的反套话规则，而是根据每个角色的具体职责定制检测点。核心洞察：可替换性是空洞内容的最强信号——把专有名词换掉后逻辑仍然成立，说明内容缺乏领域深度。
 > Source inspiration: Domain-specific "AI boilerplate detection" from external governance systems — not generic anti-filler rules, but detection points tailored to each role's specific responsibilities. Core insight: substitutability is the strongest signal of hollow content — if replacing domain-specific nouns leaves the logic intact, the content lacks depth.
@@ -330,6 +373,18 @@ M12 在执行核验时，除了检查"是否正确/符合/成立"，还**必须*
 ### 6. Binary Oversimplification / 二元过简化
 
 把复杂核验强行压缩成简单的 yes/no，丢失范围、条件和残留不确定性。
+
+### 7. Fabrication Pass-Through / 虚构内容放行
+
+核验通过但产出中包含 Agent 编造的用户未提供的事实信息（fabrication）。这是 fabrication check 缺失导致的最严重核验失败类型——因为虚构内容一旦被放行，下游无法区分真实与编造，造成不可逆的信任损失。
+
+### 8. Specification Drift Pass-Through / 规范偏离放行
+
+核验通过但实现与设计规范的具体数值不一致（如：头像尺寸、间距、色值等偏离规范）。这是 specification compliance 缺失的结果——仅检查"大致符合"而未逐条对照具体数值。
+
+### 9. Constraint Violation Pass-Through / 约束违反放行
+
+核验通过但用户明确声明的禁止项或限制条件被违反。这是 constraint compliance 缺失的结果——核验时未提取和逐条对照用户约束声明。
 
 ---
 ## Quality Criteria / 质量标准

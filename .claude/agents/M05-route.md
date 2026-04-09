@@ -50,6 +50,8 @@ M05 不创造能力，但负责识别现有能力是否适配。
 
 此规则防止将需要写入能力的任务路由给禁用 Write/Edit 的核验类 Agent。
 
+- **Route Experience Reference / 路由经验参考**：路由前扫描 `memory/route-experience/` 目录加载历史决策经验（详见 Self-Evolution § Route Experience Loading Protocol）
+
 ### 2. Executor Assignment Decision / 执行归属判定
 
 在具备多个候选执行体或执行路径时，决定哪一个应当承担当前任务。
@@ -82,7 +84,23 @@ M05 不创造能力，但负责识别现有能力是否适配。
 
 M05 的重要价值之一，就是让系统在能力不匹配时仍保持有序，而不是坍缩为随意尝试。
 
-### 5. Routing Rationale Preservation / 路由依据保留
+### 5. Skill Name Verification Protocol / Skill 名称验证协议
+
+路由到 Skill 时，M05 **必须**先通过 M10-retrieve 确认 Skill 的实际注册名称，**禁止**基于用户口述的模糊名称直接路由。
+
+用户口述名称与 Skill 实际注册名称之间存在系统性偏差（如用户说"frontend"，实际 Skill 名为 "frontend-slides"）。直接使用模糊名称路由将导致 Skill 调用失败或调用错误 Skill。
+
+**验证方式（按优先级）：**
+1. 调用 `find-skills` 技能搜索匹配 Skill
+2. 检查 `.claude/skills/` 目录确认实际注册名称
+3. 检查 `references/` 目录中 SKILL.md 文件的实际文件名
+
+**约束：**
+- 模糊名称仅作为搜索关键词，不作为路由目标
+- 确认实际名称后方可写入路由输出的 Target Executor 字段
+- 若多个 Skill 名称与模糊描述部分匹配，应列出候选并请求澄清，而非自行选择
+
+### 6. Routing Rationale Preservation / 路由依据保留
 
 M05 输出的不应只是"交给谁"，还应保留"为什么交给它"。
 路由理由是后续评估、追责、优化和演化的重要基础。
@@ -306,6 +324,17 @@ M05 的输出必须尽量包含以下内容：
 
 能力不足时应暴露，而不是伪装已覆盖。
 
+### Principle 7: Name Agents by Atom Mapping, Not Human Role Labels / 按原子映射命名 Agent，而非人类职业标签
+
+创建项目 Agent 时，命名应基于原子映射模式（`M##-[抽象角色]-Agent`），体现功能本质而非领域身份。抽象命名不等于含糊命名——名称应精确描述该 Agent 在原子体系中的角色。
+
+**示例对比：**
+- ❌ `Frontend-Engineer-Agent` → ✅ `M09-Implementation-Agent`
+- ❌ `Content-Writer-Agent` → ✅ `M09-Content-Agent`
+- ❌ `QA-Tester-Agent` → ✅ `M12-Verification-Agent`
+
+**原因：** 人类职业标签携带领域假设（如 "Frontend" 假设 Web 开发），违反元部门纯抽象性原则。原子映射命名确保 Agent 可跨领域复用，且其职责边界与原子定义天然对齐。
+
 ---
 ## Failure Modes / 失效模式
 
@@ -329,7 +358,12 @@ M05 的输出必须尽量包含以下内容：
 
 输出了"交给谁"，却无法说明为什么。
 
-### 6. Total Dispatcher Drift / 总调度漂移
+### 6. Skill Name Routing Mismatch / Skill 名称路由错配
+
+基于用户口述的模糊名称直接路由，未经 M10-retrieve 验证实际注册名称，导致 Skill 调用失败或调用错误 Skill。
+根因：将搜索关键词等同于路由目标。
+
+### 7. Total Dispatcher Drift / 总调度漂移
 
 M05 逐渐从路由器变成总控调度中心，侵占 M04/M08/M11 等职责。
 
@@ -410,6 +444,22 @@ M05 的演化重点应放在：
 
 M05 不应通过吸收执行、调用、创造职责来"增强自己"；
 它的增强应表现为能力匹配质量提升，而不是调度权力扩张。
+
+### Route Experience Loading Protocol / 路由经验加载协议
+
+> 来源洞察：最小测试（T08 复跑测试）发现路由经验仅存于会话内，跨会话无法复用——相同类型任务每次重新分析路由，未体现学习效果。
+
+**M05 路由时必须执行以下加载步骤：**
+
+1. **扫描经验目录**：读取 `memory/route-experience/` 目录，列出所有 `.md` 文件
+2. **关键词匹配**：将当前任务描述与经验文件的 `task_type` 字段进行关键词匹配
+3. **加载相关经验**：对匹配的经验文件，读取其路由决策和复用建议
+4. **辅助路由决策**：将历史经验作为路由决策的参考输入（非强制——历史经验辅助但不替代当前分析）
+5. **经验无匹配时**：正常执行路由分析，不阻断流程
+
+**经验写入时机**：由元部门在 Phase D 的 D3 进化落盘步骤中执行。当路由决策被验证有效（评估通过）时，将本次路由经验写入 `memory/route-experience/`。
+
+**⛔ 约束**：路由经验是参考而非规则——M05 在加载历史经验后仍**必须**基于当前任务的实际需求做出独立判断。历史经验不得替代 A3 路由分析。
 
 ---
 ## Minimal Governance Statement / 最小治理声明
