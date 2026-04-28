@@ -1,0 +1,200 @@
+{
+  "runHeader": {
+    "department": "engineering",
+    "primaryDeliverable": "auth-refresh-hardening",
+    "audience": "developer",
+    "freshnessRequirement": "current-repo-state",
+    "visualPolicy": "fit_department_nature",
+    "handoffPlan": "merge owner closes one consolidated deliverable after verification"
+  },
+  "taskClassification": {
+    "taskClass": "A",
+    "requestClass": "execute",
+    "governanceFlow": "complex_dev",
+    "triggerReasons": [
+      "multi_file",
+      "durable_artifact"
+    ],
+    "upgradeReasons": [
+      "review_or_verify_required"
+    ],
+    "bypassReasons": [],
+    "ownerRequired": true,
+    "decisionSource": "classifier-v2",
+    "classifierVersion": "v2",
+    "complexity": "medium"
+  },
+  "cardPlanPacket": {
+    "dealerOwner": "meta-conductor",
+    "dealerMode": "conductor-primary-warden-escalation",
+    "cards": [
+      {
+        "cardId": "card-risk",
+        "cardType": "risk",
+        "cardIntent": "risk_surface",
+        "cardDecision": "deal",
+        "cardAudience": "governance",
+        "cardTiming": "on_risk",
+        "cardShell": "summary",
+        "cardPriority": 10,
+        "cardReason": "auth boundary",
+        "cardSource": "meta-sentinel",
+        "cardSuppressed": false,
+        "suppressionReason": "",
+        "deliveryShellId": "shell-review-delta"
+      }
+    ],
+    "deliveryShells": [
+      {
+        "deliveryShellId": "shell-review-delta",
+        "shellType": "review_delta",
+        "presentationMode": "digest",
+        "exposureLevel": "review",
+        "interventionForm": "task_packet",
+        "audience": "reviewer",
+        "contentBoundary": "finding + evidence + closure target"
+      }
+    ],
+    "silenceDecision": {
+      "silenceDecision": "none",
+      "noInterventionPreferred": true,
+      "interruptionJustified": true,
+      "deferUntil": "",
+      "reasonForSilence": ""
+    },
+    "controlDecisions": [
+      {
+        "decisionId": "ctl-001",
+        "decisionType": "interrupt",
+        "skipReason": "",
+        "interruptReason": "security_risk",
+        "overrideReason": "",
+        "insertedGovernanceOwner": "meta-sentinel",
+        "emergencyGovernanceTriggered": true,
+        "returnsToStage": "verification",
+        "rejoinCondition": "security review completes"
+      }
+    ],
+    "defaultShellId": "shell-review-delta"
+  },
+  "dispatchBoard": {
+    "boardId": "dispatch-001",
+    "goal": "stabilize refresh token behavior and close one security finding",
+    "ownerResolution": "existing-owner",
+    "primaryDeliverable": "auth-refresh-hardening",
+    "mergeStrategy": "merge owner consolidates worker artifacts into one deliverable"
+  },
+  "workerTaskPackets": [
+    {
+      "taskPacketId": "task-001",
+      "owner": "meta-conductor",
+      "ownerMode": "existing-owner",
+      "todayTask": "update refresh token path",
+      "output": "code diff",
+      "deliverableLink": "auth-refresh-hardening:token-refresh",
+      "qualityBar": "close finding",
+      "referenceDirection": "auth boundary rules",
+      "handoffTarget": "meta-prism",
+      "lengthExpectation": "targeted change",
+      "visualOrAssetPlan": "none",
+      "dependsOn": [],
+      "parallelGroup": "auth-core",
+      "mergeOwner": "meta-warden"
+    }
+  ],
+  "workerResultPackets": [
+    {
+      "taskPacketId": "task-001",
+      "owner": "meta-conductor",
+      "status": "completed",
+      "producedArtifacts": [
+        "src/auth/refresh.ts"
+      ],
+      "handoffTarget": "meta-prism",
+      "blockingIssues": []
+    }
+  ],
+  "reviewPacket": {
+    "ownerCoverage": "PASS",
+    "protocolCompliance": "PASS",
+    "qualityGate": "FAIL",
+    "revisionNeeded": true,
+    "reviews": [
+      {
+        "type": "security",
+        "agent": "meta-sentinel",
+        "result": "FAIL",
+        "issues": [
+          "inline secret fallback still present"
+        ]
+      }
+    ],
+    "findings": [
+      {
+        "findingId": "finding-001",
+        "severity": "high",
+        "owner": "meta-sentinel",
+        "summary": "inline secret fallback still present",
+        "requiredAction": "remove inline secret fallback",
+        "fixArtifact": "src/auth/refresh.ts",
+        "verifiedBy": "meta-prism",
+        "closeState": "open"
+      }
+    ]
+  },
+  "verificationPacket": {
+    "verified": false,
+    "remainingIssues": [
+      "finding-001 remains open"
+    ],
+    "evidence": [
+      "inline fallback still present in src/auth/refresh.ts"
+    ],
+    "fixEvidence": [
+      "attempted change incomplete"
+    ],
+    "revisionResponses": [
+      {
+        "findingId": "finding-001",
+        "actionId": "fix-001",
+        "owner": "meta-conductor",
+        "responseType": "code-change",
+        "status": "applied",
+        "fixArtifact": "src/auth/refresh.ts",
+        "responseSummary": "partial change only"
+      }
+    ],
+    "verificationResults": [
+      {
+        "findingId": "finding-001",
+        "verifiedBy": "meta-prism",
+        "result": "fail",
+        "evidence": [
+          "inline fallback still present"
+        ],
+        "closeState": "fixed_pending_verify"
+      }
+    ],
+    "closeFindings": []
+  },
+  "summaryPacket": {
+    "verifyPassed": false,
+    "summaryClosed": false,
+    "singleDeliverableMaintained": true,
+    "deliverableChainClosed": false,
+    "consolidatedDeliverablePresent": true,
+    "publicReady": true,
+    "deliveryShellsUsed": [
+      "shell-review-delta"
+    ],
+    "blockedBy": []
+  },
+  "evolutionWritebackPacket": {
+    "ownerAssessment": "keep-existing",
+    "writebackDecision": "none",
+    "decisionReason": "verification still failed",
+    "writebacks": [],
+    "scarIds": [],
+    "syncRequired": false
+  }
+}

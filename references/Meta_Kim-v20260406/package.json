@@ -1,0 +1,47 @@
+{
+  "name": "meta-kim",
+  "version": "1.2.1",
+  "description": "Cross-runtime Meta_Kim prompt pack for Claude Code, OpenClaw, and Codex.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "sync:runtimes": "node scripts/sync-runtimes.mjs",
+    "check:runtimes": "node scripts/sync-runtimes.mjs --check",
+    "sync:global:meta-theory": "node scripts/sync-global-meta-theory.mjs",
+    "check:global:meta-theory": "node scripts/sync-global-meta-theory.mjs --check",
+    "sync:global:meta-theory:codex-active": "node scripts/sync-global-meta-theory.mjs --activate-codex",
+    "show:global:meta-theory-targets": "node scripts/sync-global-meta-theory.mjs --print-targets",
+    "discover:global": "node scripts/discover-global-capabilities.mjs",
+    "deps:install": "bash install-deps.sh",
+    "deps:update": "bash install-deps.sh --update",
+    "test:mcp": "node scripts/mcp/meta-runtime-server.mjs --self-test",
+    "prepare:openclaw-local": "node scripts/prepare-openclaw-local.mjs",
+    "eval:agents": "node scripts/eval-meta-agents.mjs",
+    "eval:agents:live": "node scripts/eval-meta-agents.mjs --live",
+    "validate:run": "node scripts/validate-run-artifact.mjs",
+    "doctor:governance": "node scripts/doctor-governance.mjs",
+    "prompt:next-iteration": "node scripts/prompt-next-iteration.mjs",
+    "probe:clis": "node scripts/eval-meta-agents.mjs --probe-clis-only",
+    "test:meta-theory": "node --test tests/meta-theory/*.test.mjs",
+    "validate": "node scripts/validate-project.mjs",
+    "check": "npm run check:runtimes && npm run validate",
+    "verify:all": "npm run check && npm run check:global:meta-theory && node scripts/eval-meta-agents.mjs --require-all-runtimes && npm run test:meta-theory",
+    "verify:all:live": "npm run check && npm run check:global:meta-theory && node scripts/eval-meta-agents.mjs --require-all-runtimes --live && npm run test:meta-theory"
+  },
+  "keywords": [
+    "claude-code",
+    "openclaw",
+    "codex",
+    "agents",
+    "prompt-pack"
+  ],
+  "author": "KimYx0207",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.27.1",
+    "zod": "^3.25.76"
+  }
+}

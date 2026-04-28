@@ -1,0 +1,95 @@
+import { promises as fs } from "node:fs";
+import os from "node:os";
+import path from "node:path";
+import process from "node:process";
+import { fileURLToPath } from "node:url";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const repoRoot = path.resolve(__dirname, "..");
+const claudeAgentsDir = path.join(repoRoot, ".claude", "agents");
+const openclawAgentsRoot = path.join(os.homedir(), ".openclaw", "agents");
+const sourceAgentDir = path.join(openclawAgentsRoot, "main", "agent");
+const filesToMirror = ["auth.json", "auth-profiles.json", "models.json"];
+
+async function ensureExists(filePath) {
+  try {
+    await fs.access(filePath);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+async function loadAgentIds() {
+  const files = (await fs.readdir(claudeAgentsDir))
+    .filter((file) => file.endsWith(".md"))
+    .sort();
+
+  return files.map((file) => file.replace(/\.md$/, ""));
+}
+
+async function copyFileIfChanged(sourcePath, targetPath) {
+  const source = await fs.readFile(sourcePath);
+  let current = null;
+
+  try {
+    current = await fs.readFile(targetPath);
+  } catch (error) {
+    if (error.code !== "ENOENT") {
+      throw error;
+    }
+  }
+
+  if (current && Buffer.compare(source, current) === 0) {
+    return false;
+  }
+
+  await fs.mkdir(path.dirname(targetPath), { recursive: true });
+  await fs.writeFile(targetPath, source);
+  return true;
+}
+
+async function main() {
+  for (const fileName of filesToMirror) {
+    const sourcePath = path.join(sourceAgentDir, fileName);
+    if (!(await ensureExists(sourcePath))) {
+      throw new Error(`Missing source OpenClaw auth file: ${sourcePath}`);
+    }
+  }
+
+  const agentIds = await loadAgentIds();
+  const changedTargets = [];
+
+  for (const agentId of agentIds) {
+    const targetAgentDir = path.join(openclawAgentsRoot, agentId, "agent");
+    await fs.mkdir(path.join(openclawAgentsRoot, agentId, "sessions"), {
+      recursive: true,
+    });
+
+    for (const fileName of filesToMirror) {
+      const sourcePath = path.join(sourceAgentDir, fileName);
+      const targetPath = path.join(targetAgentDir, fileName);
+      const changed = await copyFileIfChanged(sourcePath, targetPath);
+      if (changed) {
+        changedTargets.push(path.relative(openclawAgentsRoot, targetPath));
+      }
+    }
+  }
+
+  if (changedTargets.length === 0) {
+    console.log(`OpenClaw local agent auth is already hydrated for ${agentIds.length} meta agents.`);
+    return;
+  }
+
+  console.log(`Hydrated OpenClaw auth for ${agentIds.length} meta agents from ~/.openclaw/agents/main/agent.`);
+  for (const changed of changedTargets) {
+    console.log(`- ${changed.replace(/\\/g, "/")}`);
+  }
+}
+
+try {
+  await main();
+} catch (error) {
+  console.error(error.message);
+  process.exitCode = 1;
+}

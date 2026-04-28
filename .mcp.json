@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "dreammeta-runtime": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["scripts/mcp/dreammeta-runtime.mjs"]
+    }
+  }
+}

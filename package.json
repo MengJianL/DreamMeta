@@ -1,0 +1,15 @@
+{
+  "name": "dreammeta",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "DreamMeta (梦元) — 13-atom Meta-Department organizational architecture framework",
+  "scripts": {
+    "mcp:start": "node scripts/mcp/dreammeta-runtime.mjs",
+    "mcp:test": "node scripts/mcp/dreammeta-runtime.mjs --self-test"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.1",
+    "zod": "^3.24.4"
+  }
+}

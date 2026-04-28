@@ -1,0 +1,12 @@
+# Claude Code local state
+.claude/memory/
+.claude/data/
+.claude/projects/
+
+# Project-specific runtime data
+memory/
+reports/
+Test/
+
+# Dependencies
+node_modules/
