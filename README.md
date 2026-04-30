@@ -45,11 +45,15 @@ cp -r .claude/commands/ your-project/.claude/commands/
 
 ### 2. Run the Meta-Department
 
-In [Claude Code](https://claude.ai/code), use the `/meta` slash command:
+DreamMeta runs on both **[Claude Code](https://claude.ai/code)** and **[Codex](https://github.com/openai/codex)**.
+
+**Claude Code** — use the `/meta` slash command:
 
 ```
 /meta <describe your task here>
 ```
+
+**Codex** — copy `codex-export/` into your Codex workspace; the `meta-orchestration` skill becomes available.
 
 The Meta-Department will:
 1. **Amplify** your intent (expand fuzzy tasks along 3 dimensions)
@@ -189,6 +193,7 @@ DreamMeta/
 │   ├── agents/              # 13 atoms + architecture index (CLAUDE.md)
 │   └── commands/            # /meta slash command
 ├── agents/                  # Project Agent definitions (created by Meta-Department)
+├── codex-export/            # Codex-portable mirror (AGENTS.md + meta-orchestration skill)
 ├── references/              # Source paper, architecture diagrams, reference implementations
 ├── scripts/
 │   └── mcp/                 # MCP runtime server

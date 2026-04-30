@@ -359,6 +359,48 @@ created: [日期]
 
 **不通过** → 修正 Agent 定义，重新核验。**最多回流 2 次，第 3 次不通过 → 升级给用户决策。**
 
+### B3.5: 派单计划审查 / Dispatch Plan Audit
+
+> 来源启发：Meta_Kim 的 Gate 3 派单计划验证机制——派单计划生成后、真正派出 Agent 之前，强制让独立 Agent 审查派单合理性。核心洞察：派单决策本身需要独立审视，不能让设计派单的元部门同时审查派单。
+> Source inspiration: Meta_Kim's Gate 3 dispatch plan validation — after dispatch plan is generated, before actual Agent dispatch, an independent Agent must validate the plan. Core insight: dispatch decisions themselves need independent review; the orchestrator who designs dispatch cannot self-review.
+
+**触发条件 / Trigger Conditions**
+
+仅以下任一条件满足时触发派单计划审查：
+- 标准任务且子任务数 ≥ 3
+- 重量任务（无条件触发）
+- 用户显式要求"审查派单"
+
+不满足触发条件 → 跳过本步骤直接进入 Phase C，在治理链执行摘要中标注「派单计划审查: 未触发 / Dispatch Plan Audit: not triggered」。
+
+**审查方式 / Audit Method**
+
+派遣**独立的** Governance-Verifier-Agent（M12-verify）执行 5 项检查（与执行/核验/评估 Agent 上下文完全隔离）：
+
+| 检查项 / Check Item | 通过标准 / Pass Criteria |
+|---|---|
+| **1. Owner 覆盖 / Owner Coverage** | 每个可执行子任务都有明确指派的项目 Agent owner（无遗漏） / Every executable sub-task has an explicitly assigned project Agent owner (no omissions) |
+| **2. 跳级检测 / Skip-Level Detection** | 元部门没有自己执行应交给 Agent 的工作（无 orchestrator 越权） / The Meta-Department itself does not execute work that should be delegated to an Agent (no orchestrator overreach) |
+| **3. Capability 匹配 / Capability Match** | 每个 Agent 的「专业领域」与所派子任务相符（不是仅靠 Agent 名称匹配） / Each Agent's "specialty domain" matches its assigned sub-task (not just name-based matching) |
+| **4. 能力 Gap 识别 / Capability Gap Identification** | 没有未被任何 Agent owner 覆盖的能力缺口 / No capability gap left uncovered by any Agent owner |
+| **5. 复杂度评估 / Complexity Assessment** | 标准/重量判定与子任务实际负载相符（不存在用微型模式跳治理链的违规） / Standard/heavy classification matches actual sub-task load (no violation of using micro mode to bypass governance) |
+
+**审查输出 / Audit Output**
+
+- ✅ PASS → 元部门进入 Phase C 派遣 / Meta-Department proceeds to Phase C dispatch
+- ❌ FAIL → 元部门**必须**修正派单计划再次审查（不允许 FAIL Override） / Meta-Department **must** revise the dispatch plan and re-audit (FAIL Override is forbidden)
+
+⛔ **派单计划审查铁律 / Dispatch Plan Audit Iron Laws：**
+1. 审查者**必须**独立于元部门设计派单的过程——即派单计划完成生成后才召唤审查 Agent / The auditor **must** be independent of the dispatch design process — summon the audit Agent only after the dispatch plan is fully generated
+2. 审查 Agent 与执行/核验/评估 Agent 上下文隔离（三权分立的延伸） / The audit Agent's context is isolated from execution / verification / evaluation Agents (extension of separation of powers)
+3. FAIL 后**必须**修复，不允许「接受风险」豁免——派单错误会污染整条治理链 / After FAIL, repair is mandatory; no "accept risk" exemption — dispatch errors contaminate the entire governance chain
+4. 微型任务豁免本步骤（与治理链豁免一致） / Micro tasks are exempted from this step (consistent with governance chain exemption)
+
+**审查不通过时的处理 / Handling on FAIL：**
+- 元部门根据审查报告中的具体问题修正派单计划（修改 A4 设计书 + A3 路由结果）
+- 修正后**必须**重新派遣**新实例**的 Governance-Verifier-Agent 再次审查（禁止用同一实例复用上下文）
+- 派单审查与 B3 共享「最多回流 2 次，第 3 次不通过 → 升级给用户决策」规则
+
 ---
 
 ## Phase C: Agent 执行（使用项目 Agent）
@@ -366,7 +408,8 @@ created: [日期]
 **⛔ Phase C 入口门控：你必须在进入此阶段前确认以下全部条件，否则禁止继续：**
 1. Phase B 已完成——所有需创建的项目 Agent 定义文件已存入 `agents/` 目录
 2. B3 核验已通过——所有新建/更新的 Agent 定义已通过独立 M12 核验 Agent 检查
-3. 所有需复用的 Agent 定义已读取并确认适用
+3. B3.5 派单计划审查已通过（若触发）——若触发条件满足，独立 Governance-Verifier-Agent 审查结论必须为 PASS
+4. 所有需复用的 Agent 定义已读取并确认适用
 
 **如果上述条件未满足，你必须回退到 Phase B 补全缺失步骤。禁止在无 Agent 定义的情况下派遣执行。**
 
@@ -451,6 +494,35 @@ created: [日期]
 4. 元部门在从 Phase C 流转到 Phase D 时，**必须**验证治理证据链完整性：C2 结构化核验报告存在且结论为「通过」 → C3 评估得分存在且 ≥ 16/20 → 方可进入 Phase D
 
 **⛔ 过早完成防护铁律：任何 Agent（含元部门自身）的完成声明，若无独立核验（C2）和独立评估（C3）的治理证据支撑，即为「过早完成」，禁止据此推进到 Phase D。此规则无例外——微型任务已在 A2 豁免治理链，不受此规则约束；标准/重量任务必须完整走完 C2+C3 才可声称完成。**
+
+**⛔ 后置摘要纪律 / Post-Modify Summary Discipline（与过早完成防护互补）：**
+
+> 借鉴自 neat-freak 的「修改后才摘要」原则——摘要必须在文件修改完成之后产出，不允许"先承诺再做"。
+> Source inspiration: neat-freak's "Summary After Modification" principle — summaries must be produced **after** file modifications are complete; "promise-then-do" is not permitted.
+
+任何 Agent（含元部门自身）声称「已修改」「已完成」「已更新」等修改完成性表述前，**必须**先完成实际修改再写摘要：
+
+| 步骤 / Step | 强制要求 / Mandatory Requirement |
+|---|---|
+| **1. 实际执行修改 / Actually perform modification** | Edit / Write 工具调用**必须**已完成且工具返回成功；禁止在工具调用尚未发出或尚未成功返回时声明完成 / Edit / Write tool calls **must** have completed with success returns; declaring completion before the tool call is dispatched or has succeeded is forbidden |
+| **2. 修改完成后再写摘要 / Write summary only after modification** | 摘要**必须**在所有修改实际完成后产出；**禁止**「承诺式摘要」（即在执行前预先描述将做什么，并将其作为「已做」呈现）/ Summary **must** be produced after all modifications are actually complete; "promise-style summary" is **forbidden** (i.e., describing what will be done before execution and presenting it as "done") |
+| **3. 摘要必须包含变更定位 / Summary must include change locators** | 摘要中**必须**包含每处变更的文件路径 + 行号或 section 名（精确定位）/ Summary **must** include the file path + line number or section name for each change (precise locator) |
+
+**与过早完成防护的互补关系 / Complementary relationship to Premature Completion Guard**：
+
+| 机制 / Mechanism | 防什么 / What it prevents |
+|---|---|
+| **过早完成防护 / Premature Completion Guard** | 防"无证据声明完成"——声明完成时缺少 C2 / C3 治理证据 / Prevents "unsupported completion claim" — completion declared without C2 / C3 governance evidence |
+| **后置摘要纪律 / Post-Modify Summary Discipline** | 防"修改前先写摘要"——在 Edit/Write 工具调用尚未完成时即产出修改摘要 / Prevents "summary before modification" — producing modification summary before Edit/Write tool calls have completed |
+
+⛔ **后置摘要纪律铁律 / Post-Modify Summary Discipline Iron Laws**：
+
+- 摘要中列出的每一项变更**必须**对应一次实际成功的 Edit / Write 工具调用——禁止列出"将要做"而尚未做的项作为已完成
+- Each item listed in the summary **must** correspond to an actually successful Edit / Write tool call — listing "to-be-done" items as completed is forbidden
+- 若 Edit / Write 工具调用失败或部分失败，摘要**必须**如实标注失败项，**禁止**将失败项写为"已完成"
+- If an Edit / Write tool call fails or partially fails, the summary **must** truthfully mark the failed items; writing failed items as "completed" is **forbidden**
+- 此纪律适用于所有修改类操作（修改 Agent 定义、修改原子定义、修改 meta.md、写入 memory/ 等），不限于 Phase C 执行
+- This discipline applies to all modification operations (modifying Agent definitions, atom definitions, meta.md, writing to memory/, etc.), not limited to Phase C execution
 
 ### C3: 评估质量（M06-evaluate）
 
@@ -660,6 +732,41 @@ WHILE iteration_count < max_iterations (3):
 
 **⛔ 全局进化铁律：任何对 `~/.claude/` 下文件的修改（含原子定义、meta.md、架构索引），元部门必须先向用户展示变更内容并获得确认，禁止静默修改全局架构。此规则在全局部署模式下始终生效。**
 
+**绝对时间锚定 / Absolute Time Anchoring**：
+
+> 借鉴自 neat-freak 的「绝对时间约束 + grep 自检」模式——治理文档/记忆中严禁使用相对时间，必须写绝对日期，并配套可执行的 grep 自检模式扫描残留。
+> Source inspiration: neat-freak's "Absolute Time Constraint + grep self-check" pattern — relative time is strictly forbidden in governance documents/memory; absolute dates must be used, with an executable grep pattern for self-check.
+
+D3 进化落盘的所有写入记录（`memory/` 下的伤疤、模式、能力缺口、路由经验等），**必须**遵守以下规则：
+
+| 规则 / Rule | 要求 / Requirement |
+|---|---|
+| **使用绝对日期 / Use absolute dates** | **必须**使用 YYYY-MM-DD 格式（如 `2026-04-30`）/ **Must** use YYYY-MM-DD format (e.g., `2026-04-30`) |
+| **禁止相对时间 / No relative time** | **禁止**使用「今天」「昨天」「刚刚」「最近」「上周」「today」「yesterday」「recently」「last week」等相对时间表达 / **Forbidden** to use relative time expressions such as "今天 / 昨天 / 刚刚 / 最近 / 上周 / today / yesterday / recently / last week" |
+| **范围豁免 / Scope exemption** | 治理产出物（`memory/` 文件、伤疤记录、Agent 定义）禁止；对话过程中的瞬时引用允许 / Forbidden in governance artifacts (`memory/` files, scar records, Agent definitions); permitted in transient conversational references |
+
+**grep 自检命令 / grep Self-Check Command**：
+
+D3 末尾，元部门**必须**运行以下 grep 自检命令扫描相对时间残留：
+
+```bash
+grep -nE "今天|昨天|刚刚|最近|上周|today|yesterday|recently|last week" memory/
+```
+
+| 自检结果 / Result | 后续动作 / Action |
+|---|---|
+| **无匹配 / No matches** | 在治理链执行摘要中标注「绝对时间锚定: 通过 / Absolute Time Anchoring: pass」 / Mark "绝对时间锚定: 通过 / Absolute Time Anchoring: pass" in the governance chain summary |
+| **存在匹配 / Matches found** | **必须**修正——将相对时间替换为绝对日期，再次运行 grep 直至清零 / **Must** fix — replace relative time with absolute date and re-run grep until clean |
+
+⛔ **绝对时间锚定铁律 / Absolute Time Anchoring Iron Law**：
+
+- D3 落盘记录中**禁止**保留相对时间——这会导致跨会话记忆 30 天后语义腐烂
+- D3 records **must not** retain relative time — this leads to semantic decay of cross-session memory after 30 days
+- grep 自检**必须**在 D3 末尾**实际运行**，不允许"声明已检查"而无证据；若环境无法运行 bash，则元部门必须用 Read + 视觉扫描完成等价检查并显式声明检查方式
+- The grep self-check **must actually run** at the end of D3; "claiming checked" without evidence is forbidden; if bash is unavailable, the Meta-Department must perform an equivalent visual scan via Read and explicitly declare the check method
+- 该自检与 §十二 健康诊断精神一致——把抽象原则变成具体可测试的检查
+- This self-check aligns with §十二 Health Diagnosis spirit — turning abstract principles into concrete testable checks
+
 **进化落盘铁律**：
 
 1. **不允许静默跳过**：如果一轮任务没有明确的落盘产物，元部门**必须**显式声明「本轮无进化项 / No evolution items this round」，并简要说明理由。禁止不经审视即结束任务。
@@ -681,6 +788,27 @@ WHILE iteration_count < max_iterations (3):
 2. **落盘优先级**：伤疤记录（impact: critical/recovered）> Agent 边界调整 > 模式沉淀 > 路由经验
 3. **执行方式**：D3 由元部门自身完成（属于基础设施维护，不需要派遣独立 Agent），但伤疤记录通过 M01 写入。
 4. **反思必须落地**：D3 中识别的每个规则缺口**必须**在同一会话中产出至少一项文件变更（修改 M13/M12/meta.md/CLAUDE.md 等治理文件）。若当前无法修改，**必须**创建 task 追踪。「未来考虑」式反思**禁止**作为 D3 产出——它不构成有效的进化落盘。（参见 scar-001）
+5. **机械式枚举盘点 / Mechanical Enumeration Audit**：
+
+   > 借鉴自 neat-freak 的「强制机械式枚举盘点」机制——禁止凭印象跳过任何审视维度，必须对每个维度做强制三态标记。
+   > Source inspiration: neat-freak's "Mandatory Mechanical Inventory" mechanism — forbid impression-based skipping of any review dimension; mandatory tri-state marking per dimension.
+
+   D3 进化审视时，元部门**必须**对四个审视维度（**模式沉淀** / **伤疤记录** / **Agent 边界调整** / **路由经验**）做**强制三态标记**，禁止凭印象跳过任意一个维度：
+
+   | 三态标记 / Tri-State Marker | 含义 / Meaning | 强制要求 / Mandatory Requirement |
+   |---|---|---|
+   | ✅ **已落盘 / Written** | 本轮已产生具体文件变更 / Concrete file changes have been produced this round | 必须列出对应的文件路径与变更摘要 / Must list the corresponding file paths and change summary |
+   | 🔄 **进行中 / In Progress** | 本轮识别出的进化项尚未完成 / An evolution item was identified this round but is not yet complete | **必须**创建 task 追踪（与本铁律第 4 条「反思必须落地」一致）/ **Must** create a tracking task (consistent with iron law #4 "Reflection must land") |
+   | ⏸️ **本轮无 / N/A** | 经审视确认本维度无产出 / After review, confirmed this dimension has no output this round | 必须显式标注「⏸️ 本轮无」并简要说明审视过程 / Must explicitly mark "⏸️ N/A" and briefly explain the review process |
+
+   ⛔ **三态标记铁律 / Tri-State Marking Iron Law**：
+
+   - **漏一个维度不行 / No dimension may be skipped** — 三态标记**必须**四个维度（模式 / 伤疤 / Agent 边界 / 路由）**全部覆盖**，禁止跳过任一维度
+   - **No dimension may be skipped** — Tri-state markers **must** cover **all four dimensions** (Pattern / Scar / Agent Boundary / Routing); skipping any dimension is forbidden
+   - 禁止以「无明显进化项」一句话概括四个维度——必须逐维度标记
+   - It is forbidden to summarize all four dimensions with a single "no obvious evolution items" — each dimension must be marked individually
+   - 此铁律为"机械式"约束——元部门**禁止**凭印象判断哪些维度"显然无产出"而跳过逐项标记
+   - This iron law is a "mechanical" constraint — the Meta-Department is **forbidden** from skipping per-dimension marking based on impressions of which dimensions are "obviously empty"
 
 **伤疤自动注入 / Scar Auto-Injection**：
 

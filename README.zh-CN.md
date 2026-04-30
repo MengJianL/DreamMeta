@@ -45,11 +45,15 @@ cp -r .claude/commands/ your-project/.claude/commands/
 
 ### 2. 运行元部门
 
-在 [Claude Code](https://claude.ai/code) 中使用 `/meta` 斜杠命令：
+DreamMeta 同时支持 **[Claude Code](https://claude.ai/code)** 与 **[Codex](https://github.com/openai/codex)** 两种平台。
+
+**Claude Code** — 使用 `/meta` 斜杠命令：
 
 ```
 /meta <在此描述你的任务>
 ```
+
+**Codex** — 将 `codex-export/` 复制到你的 Codex workspace，`meta-orchestration` skill 即可使用。
 
 元部门将依次执行：
 1. **意图放大** — 沿三个维度拓展模糊任务
@@ -189,6 +193,7 @@ DreamMeta/
 │   ├── agents/              # 13 原子 + 架构索引（CLAUDE.md）
 │   └── commands/            # /meta 斜杠命令
 ├── agents/                  # 项目 Agent 定义（由元部门创建）
+├── codex-export/            # Codex 平台移植包（AGENTS.md + meta-orchestration skill）
 ├── references/              # 源论文、架构图、参考实现
 ├── scripts/
 │   └── mcp/                 # MCP 运行时服务器
